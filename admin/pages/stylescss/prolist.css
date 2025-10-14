@@ -1,0 +1,476 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    max-width: 100%;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    overflow-x: hidden;
+}
+
+select, input, button, textarea {
+    outline: none;
+}
+
+.text-align-center{
+    text-align: center;
+}
+
+.icon-denim{
+    margin-bottom: 20px;
+    font-weight: 500px;
+}
+
+.icon-denim:hover{
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+.img-edit{
+    margin: auto;
+    display: block;
+}
+
+.img-head {
+    width: 40px;       
+    height: 40px;       
+    border-radius: 50%; 
+    object-fit: cover;  
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+
+}
+
+.user-info .img-head {
+    width: 100px;       
+    height: 100px;      
+    border-radius: 50%;
+    object-fit: cover; 
+}
+
+.user-info .role {
+    font-size: 16px;         
+    font-weight: bold;      
+    color: #ffffff;        
+    margin-left: 10px;   
+    display: block;
+    width: 100%;   
+}
+
+.sidebar {
+    position: fixed;
+    width: 250px;
+    background-color: #1d2d50;
+    color: #fff;
+    padding: 20px;
+    position: fixed;
+    height: 100%;
+}
+
+.sidebar a:hover{
+    text-decoration: none;
+}
+
+.sidebar h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.sidebar a {
+    color: #fff;
+    padding: 10px 20px;
+    text-decoration: none;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: 0.3s;
+}
+
+.sidebar a:hover,
+.sidebar a.active {
+    background-color: #3f51b5;
+    color: #fff;
+    border-radius: 5px;
+}
+
+.sidebar .icon {
+    font-size: 18px;
+}
+main {
+    margin-left: 250px;
+    padding: 20px;
+    flex: 1;
+}
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 10px 15px;
+}
+
+nav ul li a.active {
+    background-color: #5092dd;
+    border-radius: 5px;
+}
+.order-management {
+    padding: 20px;
+    max-width: 1200px;
+    margin-top: 100px;
+}
+
+.order-management h2 {
+    margin-bottom: 15px; 
+    margin-left: -1%;
+}
+.edit-icon{
+    font-size: 17px !important;
+ }
+
+ .web-header {
+    display: flex;
+    position: fixed;
+    align-items: center;
+    justify-content: center; 
+    font-size: 30px;
+    padding: 10px 0;
+    border-bottom: 1px solid #333;
+    background-color: white;
+    z-index: 999;
+    top: 0;
+    right: 0;
+    left: 250px;
+}
+
+.web-header img{
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+.web-header a img {
+    width: 150px;
+    height: 100px;
+    border-radius: 5px; 
+    margin-right: 10px; 
+    margin-top: 10px;
+}
+
+.web-header a:hover {
+    text-decoration: none;
+}
+
+.contact-head{
+   margin-left: 1.5%;
+}
+hr{
+    margin-top: 0 !important;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.action-buttons button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table th, table td {
+    border: 1px solid #ccc;
+    padding: 15px;
+    text-align: left;
+    background-color: #fff;
+}
+
+table th {
+    background-color: #f3f3f3;
+}
+
+thead{
+    text-align: center !important;
+    margin-left: 10px;
+}
+
+th {  
+    background-color: #f3f3f3;
+    text-align: center !important;
+}  
+
+.btn.green{
+    background-color: #4CAF50;
+    color: #fff;
+    margin-bottom: 24px;
+}
+
+.edit-icon, .delete-icon {
+    font-size: 15px;
+    width: 20px;   
+    display: flex;
+}
+
+.btn-outline-warning.edit {
+    border: 1px solid green ; 
+    background-color: white; 
+    color: green;
+}
+
+.btn-outline-warning.edit:hover {
+    background-color: green; 
+    color: white;
+}
+
+.btn-outline-danger.trash{
+    border: 1px solid #f44336; 
+    background-color: white; 
+    color: #f44336;
+}
+
+.btn-outline-danger.trash:hover {
+    background-color: #f44336;
+    color: white;
+}
+
+.btn-outline-warning.edit:focus,
+.btn:active {
+    outline: none !important;
+    color: green !important;
+}
+
+.btn-outline-danger.trash:focus,
+.btn:active {
+    outline: none !important;
+    color: #f44336 !important;
+}
+
+td img {  
+    width: 100%; 
+    height: auto; 
+    max-width: 100px; 
+    border-radius: 5px;  
+}
+
+.actions {  
+    display: flex;  
+    gap: 10px;
+}  
+
+.btn {  
+    padding: 10px 15px;  
+    border: 1px solid transparent; 
+    border-radius: 5px;  
+    cursor: pointer;  
+    font-size: 14px;  
+    text-align: center;  
+}  
+
+.btn:focus,
+.btn:active {
+    color: #ffffff !important;
+}
+
+.btn:hover {
+    color: #ffffff !important;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 10px 15px;
+}
+
+nav ul li a.active {
+    background-color: #5092dd;
+    border-radius: 5px;
+}
+.page-center{
+    text-align: center;
+    margin-right: -15%;
+}
+
+.pagination li.page-item a.page-link:focus {
+    background-color: white !important;
+    outline: none !important;
+    color: #337ab7;
+}
+
+.icon-denim-active {
+    background-color: #3f51b5;
+    border-radius: 10px;
+}
+
+header {
+    position: fixed;
+    top: 0;
+    left: 250px;
+    width: calc(100% - 250px);
+    margin-bottom: 250px;
+    z-index: 1000;
+}
+
+.header h1 {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+}
+
+.modal {
+    text-align: center;
+}
+
+.modal-dialog {
+    display: inline-block;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.modal:before {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+    margin-right: -4px;
+}
+
+.modal-content {
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    border: none;
+}
+
+.modal-header {
+    background-color: #f8f9fa;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding: 15px;
+    text-align: center;
+}
+
+.modal-header .modal-title {
+    color: #333;
+    font-weight: bold;
+    margin: 0 auto;
+}
+
+.modal-body {
+    padding: 20px;
+    text-align: center;
+    font-size: 16px;
+    color: #555;
+}
+
+.modal-footer {
+    background-color: #f8f9fa;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.modal-footer .btn {
+    min-width: 100px;
+    border-radius: 5px;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+}
+
+.modal-footer .btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: white;
+}
+
+.modal-footer .btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+    color: white;
+}
+
+.modal-footer .btn:hover {
+    opacity: 0.8;
+}
+
+.btn-secondary {
+    background-color: #dc3545 !important; 
+    color: white !important;
+    border-color: #dc3545 !important;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background-color: #c82333 !important; 
+    color: white !important;
+}
+
+.btn-secondary:active {
+   outline: none !important;
+}
+
+.btn-primary {
+    background-color: #28a745 !important; 
+    color: white !important;
+    border-color: #28a745 !important;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #218838 !important; 
+    color: white !important;
+}
+
+.btn-primary:active {
+    outline: none !important;
+}
+
+#ModalUP .modal-footer .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 4px;
+}
+
+#ModalUP .modal-footer .btn:focus {
+    box-shadow: 0 0 0 3px rgba(0,123,255,0.3);
+    outline: none;
+}

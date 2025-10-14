@@ -1,0 +1,475 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    overflow-x: hidden;
+}
+
+.icon-denim{
+    margin-bottom: 20px;
+    font-weight: 500px;
+}
+
+hr{
+    margin-top: 0 !important;
+}
+
+.text-align-center{
+    text-align: center;
+}
+
+.page-center{
+    text-align: center;
+    margin-right: -12%;
+}
+
+.pagination li.page-item a.page-link:focus {
+    background-color: white !important;
+    outline: none !important;
+    color: #337ab7;
+}
+
+.img-edit{
+    margin: auto;
+    display: flex;
+}
+
+.left-text{
+    margin: auto;
+    font-size: 40px;
+}
+
+.img-head {
+    width: 40px;       
+    height: 40px;       
+    border-radius: 50%; 
+    object-fit: cover;  
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+
+}
+
+.user-info .img-head {
+    width: 100px;       
+    height: 100px;      
+    border-radius: 50%;
+    object-fit: cover; 
+}
+
+.user-info .role {
+    font-size: 16px;         
+    font-weight: bold;      
+    color: #ffffff;        
+    margin-left: 10px;   
+    display: flex;
+    width: 100%;   
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #1d2d50;
+    color: #fff;
+    padding: 20px;
+    position: fixed;
+    height: 100%;
+    width: 250px;
+    transition: width 0.3s ease;
+    overflow-x: hidden;
+}
+
+.sidebar a:hover{
+    text-decoration: none;
+}
+
+.sidebar h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.sidebar a {
+    color: #fff;
+    padding: 10px 20px;
+    text-decoration: none;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: 0.3s;
+}
+
+.sidebar a:hover,
+.sidebar a.active {
+    background-color: #3f51b5;
+    color: #fff;
+    border-radius: 5px;
+}
+
+.sidebar .icon {
+    font-size: 18px;
+
+}
+
+.sidebar.collapsed {
+    width: 60px;
+}
+
+.sidebar a {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sidebar.collapsed a span {
+    display: none;
+}
+
+.sidebar-toggle {
+    position: relative;
+    z-index: 10;
+}
+
+.sidebar.collapsed #toggleIcon {
+    transform: rotate(180deg);
+}
+
+.web-header{
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    align-items: center;
+    margin-top: -2%;
+    border-bottom: 1px solid black;
+    padding-bottom: 10px;
+    padding-left: 10px;
+}
+
+.contact-head{
+   margin-left: 1.5%;
+}
+
+.order-management {
+    padding: 20px;
+    max-width: 1200px;
+    margin-top: 60px;
+}
+
+.order-management h2 {
+    margin-bottom: 15px; 
+    margin-left: -3%;
+}
+
+main {  
+    margin-left: 240px; 
+    padding: 40px;
+}  
+
+.header {  
+    display: flex; 
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}  
+
+.btn {
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    background-color: white;
+    border: 1px solid transparent;
+}
+
+.btn.delete {
+    color: #f44336; 
+    border: 1px solid #f44336; 
+}
+
+.btn.gear {
+    color: green; 
+    border: 1px solid green; 
+}
+
+.btn.lock {
+    color: #555; 
+    border: 1px solid #555;
+}
+
+.btn.delete:hover {
+    background-color: #f4574c; 
+    color: white;
+}
+
+.btn.gear:hover {
+    background-color: green; 
+    color: white;
+}
+
+.btn.lock:hover {
+    background-color: #848484; 
+    color: white;
+}
+
+.btn.lock:focus,
+.btn:active {
+    color: #555 !important;
+}
+
+.btn.gear:focus,
+.btn:active {
+    color: green !important;
+}
+
+.btn.delete:focus,
+.btn:active {
+    color: #f44336 !important;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    height: 600px;
+}
+
+table th, table td {
+    border: 1px solid #ccc;
+    padding: 15px;
+    text-align: left;
+    background-color: #fff;
+}
+
+table th {
+    background-color: #f3f3f3;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 10px 15px;
+}
+
+nav ul li a.active {
+    background-color: #5092dd;
+    border-radius: 5px;
+}
+.actions {  
+    display: flex;  
+    gap: 10px;
+}  
+
+.btn {  
+    padding: 10px 15px;  
+    border: 1px solid transparent; 
+    border-radius: 5px;  
+    cursor: pointer;  
+    font-size: 14px;  
+    text-align: center;  
+}  
+
+.btn.green1 {  
+    background-color: #4CAF50;
+    color: #fff;
+}  
+
+.btn.green {  
+    background-color: #4CAF50;
+    color: #fff;
+}  
+
+header {
+    position: fixed;
+    top: 0;
+    left: 250px;
+    width: calc(100% - 250px);
+    margin-bottom: 250px;
+    z-index: 1000;
+}
+
+.web-header {
+    display: flex;
+    position: fixed;
+    align-items: center;
+    justify-content: center; 
+    font-size: 30px;
+    padding: 10px 0;
+    border-bottom: 1px solid #333;
+    background-color: white;
+    z-index: 999;
+    top: 0;
+    right: 0;
+    left: 250px;
+    padding-bottom: 10px; 
+}
+
+.web-header img{
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+.web-header a img {
+    width: 150px;
+    height: 100px;
+    border-radius: 5px;
+    margin-right: 10px;
+    margin-top: 15px;
+}
+
+.web-header a:hover {
+    text-decoration: none;
+}
+
+.icon-denim-active {
+    background-color: #3f51b5;
+    border-radius: 10px;
+}
+
+.icon-denim:hover{
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+input[type=search] {
+    border-radius: 5px;
+}
+
+.btn:focus,
+.btn:active {
+    color: #ffffff !important;
+}
+
+.btn:hover {
+    color: #ffffff !important;
+}
+
+.btn.orange:focus,
+.btn.orange:active,
+.btn.yellow:focus,
+.btn.yellow:active {
+    color: black !important;
+}
+
+.btn.orange:hover,
+.btn.yellow:hover {
+    color: black !important;
+}
+
+.modal-dialog {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 650px; 
+}
+
+.modal-content {
+    margin: auto;
+    max-width: 500px; 
+    width: 80%; 
+}
+
+#ModalKP .modal-footer .btn-secondary {
+    background-color: #dc3545 !important; 
+    color: white !important;
+    border-color: #dc3545 !important;
+    transition: all 0.3s ease;
+}
+
+#ModalKP .modal-footer .btn-secondary:hover {
+    background-color: #c82333 !important;
+    color: white !important;
+}
+
+#ModalKP .modal-footer .btn-primary {
+    background-color: #28a745 !important;
+    color: white !important;
+    border-color: #28a745 !important;
+    transition: all 0.3s ease;
+}
+
+#ModalKP .modal-footer .btn-primary:hover {
+    background-color: #218838 !important; 
+    color: white !important;
+}
+
+#ModalKP .modal-footer .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 4px;
+}
+
+#ModalKP .modal-footer .btn:focus {
+    box-shadow: 0 0 0 3px rgba(0,123,255,0.3);
+    outline: none;
+}
+
+#ModalUP .modal-footer .btn-secondary {
+    background-color: #dc3545 !important; /* Màu đỏ cho nút Hủy bỏ */
+    color: white !important;
+    border-color: #dc3545 !important;
+    transition: all 0.3s ease;
+}
+
+#ModalUP .modal-footer .btn-secondary:hover {
+    background-color: #c82333 !important; /* Màu đỏ đậm hơn khi hover */
+    color: white !important;
+}
+
+#ModalUP .modal-footer .btn-primary {
+    background-color: #28a745 !important; /* Màu xanh lá cây cho nút Lưu lại */
+    color: white !important;
+    border-color: #28a745 !important;
+    transition: all 0.3s ease;
+}
+
+#ModalUP .modal-footer .btn-primary:hover {
+    background-color: #218838 !important; /* Màu xanh lá cây đậm hơn khi hover */
+    color: white !important;
+}
+
+#ModalUP .modal-footer .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 4px;
+}
+
+#ModalUP .modal-footer .btn:focus {
+    box-shadow: 0 0 0 3px rgba(0,123,255,0.3);
+    outline: none;
+}
+
+.modal-title{
+    position: relative;
+    font-weight: bold;
+    text-align: center;
+}

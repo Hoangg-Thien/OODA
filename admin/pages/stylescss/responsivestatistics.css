@@ -1,0 +1,192 @@
+@media screen and (max-width: 992px) {
+    .sidebar {
+        width: 250px;
+        position: fixed;
+        left: -250px;
+        top: 0;
+        transition: all 0.3s;
+        z-index: 1000;
+        height: 100vh;
+        background: #1d2d50;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        overflow-y: auto;
+    }
+
+    .sidebar.active {
+        left: 0;
+        top: 0;
+        position: fixed;
+        z-index: 9999;
+        background-color: #1d2d50;
+        height: 100%;
+        width: 250px;
+        overflow-y: auto;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+
+    .toggle-sidebar {
+        display: block;
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        z-index: 1001;
+        cursor: pointer;
+        background: #2b447a;
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    .main {
+        width: 100%;
+        margin-left: 0;
+        transition: all 0.3s;
+    }
+
+    .action-buttons-wrapper {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .action-buttons-wrapper button {
+        margin: 5px;
+    }
+
+    .filter__left,
+    .filter__right {
+        text-align: center;
+        width: 100%;
+    }
+
+    table {
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .web-header {
+        display: flex;
+        position: fixed;
+        align-items: center;
+        justify-content: center; 
+        font-size: 30px;
+        padding: 10px 0;
+        border-bottom: 1px solid #333;
+        background-color: white;
+        z-index: 999;
+        top: 0;
+        right: 0;
+        left: 0;
+    }
+
+    .web-header img {
+        max-width: 100%;
+        height: auto;
+        object-fit: contain;
+    }
+
+    .web-header a img {
+        width: 150px;
+        height: 100px;
+        border-radius: 5px; 
+        margin-right: 10px; 
+        margin-top: 10px;
+    }
+
+    .web-header a:hover {
+        text-decoration: none;
+    }
+
+    .order-management h1 {
+        font-size: 24px;
+    }
+
+    .action-buttons-wrapper .btn {
+        font-size: 12px;
+        padding: 6px 10px;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .web-header {
+        display: flex;
+        position: fixed;
+        align-items: center;
+        justify-content: center; 
+        font-size: 30px;
+        padding: 10px 0;
+        border-bottom: 1px solid #333;
+        background-color: white;
+        z-index: 999;
+        top: 0;
+        right: 0;
+        left: 0;
+    }
+
+    .web-header img {
+        max-width: 100%;
+        height: auto;
+        object-fit: contain;
+    }
+
+    .web-header a img {
+        width: 150px;
+        height: 100px;
+        border-radius: 5px; 
+        margin-right: 10px; 
+        margin-top: 10px;
+    }
+
+    .web-header a:hover {
+        text-decoration: none;
+    }
+
+    .action-buttons-wrapper .btn {
+        width: 100%;
+        margin: 5px 0;
+    }
+
+    .search-hole {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .filter__left,
+    .filter__right {
+        margin-top: 10px;
+    }
+
+    .modal-dialog {
+        width: 95%;
+        margin: 10px auto;
+    }
+}
+
+@media screen and (min-width: 993px) {
+    .toggle-sidebar {
+        display: none;
+    }
+    
+    .sidebar {
+        left: 0;
+    }
+    
+    .main {
+        margin-left: 250px;
+    }
+    
+    .sidebar .closebtn {
+        display: none;
+    }
+}
+
+.sidebar-header {
+    padding: 15px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 20px;
+    font-weight: bold;
+    font-size: 20px;
+}
