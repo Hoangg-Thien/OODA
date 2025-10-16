@@ -3,7 +3,6 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 header('Content-Type: application/json');
 
-
 require '../config/connect.php';
 $product_id = $_POST['product_id'];
 $product_name = $_POST['product_name'];

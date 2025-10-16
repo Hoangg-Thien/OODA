@@ -18,15 +18,12 @@ if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'Nhân viên') 
 
 require '../config/connect.php';
 
-$sql = "SELECT user_name, fullname, user_address, user_email, phone, user_role, user_status, district, province FROM nguoidung";
-$result = $conn->query($sql);
-
 // Lấy trang hiện tại từ URL, mặc định là 1
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $limit = 4; 
 $offset = ($page - 1) * $limit;
 
-$sql = "SELECT user_name, fullname, user_address, user_email, phone, user_role, user_status FROM nguoidung LIMIT $limit OFFSET $offset";
+$sql = "SELECT user_name, fullname, user_address, user_email, phone, user_role, user_status, district, province FROM nguoidung nd LIMIT $limit OFFSET $offset";
 $result = $conn->query($sql);
 
 // Lấy tổng số người dùng để tính số trang
@@ -45,7 +42,7 @@ if (isset($_GET['province']) && !empty($_GET['province'])) {
     if ($province_result && mysqli_num_rows($province_result) > 0) {
         $province_data = mysqli_fetch_assoc($province_result);
         $province_name = mysqli_real_escape_string($conn, trim($province_data['name']));
-        $where_clause .= " AND (hd.province LIKE '%$province_name%' OR hd.address LIKE '%$province_name%')";
+        $where_clause .= " AND (nd.province LIKE '%$province_name%' OR nd.address LIKE '%$province_name%')";
     }
 }
 
@@ -57,7 +54,7 @@ if (isset($_GET['district']) && !empty($_GET['district'])){
     if ($district_result && mysqli_num_rows($district_result) > 0) {
         $district_data = mysqli_fetch_assoc($district_result);
         $district_name = mysqli_real_escape_string($conn, trim($district_data['name']));
-        $where_clause .= " AND (hd.district LIKE '%$district_name%' OR hd.address LIKE '%$district_name%')";
+        $where_clause .= " AND (nd.district LIKE '%$district_name%' OR nd.address LIKE '%$district_name%')";
     }
 }
 

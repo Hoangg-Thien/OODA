@@ -38,8 +38,8 @@ $orders_sql = "SELECT hd.order_id, hd.order_date, nd.fullname,
                JOIN sanpham sp ON cthd.product_id = sp.product_id 
                WHERE cthd.order_id = hd.order_id) as total_amount
               FROM hoadon hd 
-              LEFT JOIN nguoidung nd ON hd.user_name = nd.user_name
-              WHERE 1=1 AND hd.order_status = 'Giao thành công' $where_clause
+              LEFT JOIN nguoidung nd ON hd.creator = nd.user_name
+              WHERE 1=1 AND hd.order_status = 'Giao thành công'
               ORDER BY hd.order_date DESC";
 
 $orders_result = mysqli_query($conn, $orders_sql);
@@ -111,7 +111,7 @@ if ($top_products_result && mysqli_num_rows($top_products_result) > 0) {
         $product_orders_sql = "SELECT DISTINCT hd.order_id, hd.order_date, nd.fullname
                       FROM hoadon hd
                       JOIN chitiethoadon cthd ON hd.order_id = cthd.order_id
-                      LEFT JOIN nguoidung nd ON hd.user_name = nd.user_name
+                      LEFT JOIN nguoidung nd ON hd.creator = nd.user_name
                       WHERE cthd.product_id = '{$product['product_id']}'
                       AND hd.order_status = 'Giao thành công' $where_clause
                       ORDER BY hd.order_date DESC";
@@ -169,7 +169,7 @@ if ($best_seller_result && mysqli_num_rows($best_seller_result) > 0) {
     $product_orders_sql = "SELECT DISTINCT hd.order_id, hd.order_date, nd.fullname
                       FROM hoadon hd
                       JOIN chitiethoadon cthd ON hd.order_id = cthd.order_id
-                      LEFT JOIN nguoidung nd ON hd.user_name = nd.user_name
+                      LEFT JOIN nguoidung nd ON hd.creator = nd.user_name
                       WHERE cthd.product_id = '{$best_seller['product_id']}'
                       AND hd.order_status = 'Giao thành công' $where_clause
                       ORDER BY hd.order_date DESC";
@@ -194,7 +194,7 @@ if ($worst_seller_result && mysqli_num_rows($worst_seller_result) > 0) {
     $product_orders_sql = "SELECT DISTINCT hd.order_id, hd.order_date, nd.fullname
                       FROM hoadon hd
                       JOIN chitiethoadon cthd ON hd.order_id = cthd.order_id
-                      LEFT JOIN nguoidung nd ON hd.user_name = nd.user_name
+                      LEFT JOIN nguoidung nd ON hd.creator = nd.user_name
                       WHERE cthd.product_id = '{$worst_seller['product_id']}'
                       AND hd.order_status = 'Giao thành công' $where_clause
                       ORDER BY hd.order_date DESC";
