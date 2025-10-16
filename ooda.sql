@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th10 16, 2025 lúc 11:21 AM
+-- Thời gian đã tạo: Th10 16, 2025 lúc 03:26 PM
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
 -- Phiên bản PHP: 8.2.12
 
@@ -34,6 +34,21 @@ CREATE TABLE `chitiethoadon` (
   `quantity` int(11) NOT NULL,
   `unit_price` decimal(15,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `chitiethoadon`
+--
+
+INSERT INTO `chitiethoadon` (`product_id`, `order_id`, `total_amount`, `quantity`, `unit_price`) VALUES
+('F001', 1, 1500000.00, 3, 500000.00),
+('F001', 4, 2000000.00, 4, 500000.00),
+('F002', 1, 300000.00, 2, 150000.00),
+('F002', 4, 800000.00, 2, 400000.00),
+('F003', 2, 1200000.00, 1, 1200000.00),
+('F003', 5, 1000000.00, 2, 500000.00),
+('F004', 2, 600000.00, 3, 200000.00),
+('F004', 5, 750000.00, 3, 250000.00),
+('F005', 3, 450000.00, 5, 90000.00);
 
 -- --------------------------------------------------------
 
@@ -767,7 +782,7 @@ INSERT INTO `district` (`district_id`, `province_id`, `name`) VALUES
 
 CREATE TABLE `hoadon` (
   `order_id` int(11) NOT NULL,
-  `creator` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
   `order_status` varchar(255) DEFAULT NULL,
   `order_date` datetime NOT NULL,
   `PaymentMethod` varchar(255) NOT NULL,
@@ -776,6 +791,17 @@ CREATE TABLE `hoadon` (
   `district` varchar(255) NOT NULL,
   `address` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `hoadon`
+--
+
+INSERT INTO `hoadon` (`order_id`, `name`, `order_status`, `order_date`, `PaymentMethod`, `phone`, `province`, `district`, `address`) VALUES
+(1, 'uyvu123', 'Giao thành công', '2025-10-10 14:32:00', 'Chuyển khoản', '1234567890', 'Hà Nội', 'Ba Đình', '12 Phan Đình Phùng'),
+(2, 'uyvu123', 'Đã hủy', '2025-10-11 09:20:00', 'Tiền mặt', '0909123457', 'Hồ Chí Minh', 'Quận 1 ', '25 Nguyễn Huệ'),
+(3, 'uyvu123', 'Chưa xác nhận', '2025-10-12 15:45:00', 'Tiền mặt', '0905123456', 'Đà Nẵng', 'Hải Châu ', '56 Lê Duẩn'),
+(4, 'uyvu123', 'Đã xác nhận', '2025-10-13 10:10:00', 'Chuyển khoản', '0932123123', 'Cần Thơ', 'Ninh Kiều', '89 Trần Hưng Đạo'),
+(5, 'uyvu123', 'Giao thành công', '2025-10-14 18:00:00', 'Tiền mặt', '0945234567', 'Huế', 'Phú Hội', '11 Nguyễn Huệ');
 
 -- --------------------------------------------------------
 
@@ -952,10 +978,10 @@ CREATE TABLE `sanpham` (
 --
 
 INSERT INTO `sanpham` (`product_id`, `category_id`, `supplier_id`, `product_name`, `product_image`, `product_status`, `product_price`, `product_description`, `product_link`, `productnolog_link`, `hidden`) VALUES
-('F001', 1, 1, 'Chuối chín Nam Mỹ', 'trai-chuoi.jpg', '	\r\nHiển thị', 160000.00, '', '', '', 0),
+('F001', 1, 1, 'Chuối chín Nam Mỹ', 'trai-chuoi.jpg', 'Hiển thị', 160000.00, '', '', '', 0),
 ('F002', 1, 1, 'Kiwi', 'trai-kiwi.jpg', 'Hiển thị', 160000.00, '', '', '', 0),
 ('F003', 1, 1, 'Lựu Ai Cập', 'trai-luu.jpg', 'Hiển thị', 160000.00, '', '', '', 0),
-('F004', 1, 1, 'Mận Đỏ An Phước', 'trai-man-do.jpg', 'Hiển thị', 45000.00, '', '', '', 0),
+('F004', 2, 1, 'Mận Đỏ An Phước', 'trai-man-do.jpg', 'Hiển thị', 45000.00, '', '', '', 0),
 ('F005', 1, 1, 'Mãng Cầu Xiêm', 'trai-mang-cau.jpg', 'Hiển thị', 45000.00, '', '', '', 0),
 ('F006', 1, 1, 'Nho Mỹ', 'trai-nho-My.jpg', 'Hiển thị', 160000.00, '', '', '', 0),
 ('F007', 1, 1, 'Ổi Xá Lị', 'trai-oi.jpg', 'Hiển thị', 45000.00, '', '', '', 0),
@@ -11619,7 +11645,7 @@ ALTER TABLE `district`
 --
 ALTER TABLE `hoadon`
   ADD PRIMARY KEY (`order_id`),
-  ADD KEY `creator` (`creator`);
+  ADD KEY `creator` (`name`);
 
 --
 -- Chỉ mục cho bảng `loaisanpham`
@@ -11668,7 +11694,7 @@ ALTER TABLE `ward`
 -- AUTO_INCREMENT cho bảng `chitiethoadon`
 --
 ALTER TABLE `chitiethoadon`
-  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT cho bảng `district`
@@ -11680,7 +11706,7 @@ ALTER TABLE `district`
 -- AUTO_INCREMENT cho bảng `hoadon`
 --
 ALTER TABLE `hoadon`
-  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT cho bảng `loaisanpham`
@@ -11727,7 +11753,7 @@ ALTER TABLE `district`
 -- Các ràng buộc cho bảng `hoadon`
 --
 ALTER TABLE `hoadon`
-  ADD CONSTRAINT `hoadon_ibfk_2` FOREIGN KEY (`creator`) REFERENCES `nguoidung` (`user_name`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `hoadon_ibfk_2` FOREIGN KEY (`name`) REFERENCES `nguoidung` (`user_name`) ON UPDATE CASCADE;
 
 --
 -- Các ràng buộc cho bảng `sanpham`
