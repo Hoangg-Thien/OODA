@@ -71,7 +71,7 @@ if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'Nhân viên') 
 
         <div class="container">
             
-            <form method="POST" enctype="multipart/form-data" action = "save_product.php">
+            <form method="POST" enctype="multipart/form-data" action = "../controllers/save_product.php">
                 <div class="form-group-row">
                     <div class="form-group">
                         <label for="product-code">Mã sản phẩm</label>

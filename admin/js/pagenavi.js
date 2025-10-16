@@ -25,27 +25,28 @@ function displayProducts(page) {
     const productTable = document.getElementById("productTable");
     productTable.innerHTML = "";
 
-    // Hiển thị tất cả sản phẩm, không lọc theo hidden
+    // Hiển thị tất cả sản phẩm
     let start = (page - 1) * itemsPerPage;
     let end = start + itemsPerPage;
     let paginatedItems = products.slice(start, end);
 
     paginatedItems.forEach(product => {
-        let row;
-            row = `
-                <tr>
-                    <td>${product.product_id}</td>
-                    <td>${product.product_name}</td>
-                    <td>${product.category_id}</td>
-                    <td>${product.supplier_id}</td>
-                    <td>echo '<img src="../img/' . htmlspecialchars($row['product_image']) . '" alt="' . htmlspecialchars($row['product_name']) . '" width="50">';</td>
-                    <td>${product.product_price}</td>
-                    <td>${product.product_status}</td>
-                    <td>
-                        <button class="btn btn-outline-danger btn-sm trash" title="Xóa" onclick="deleteProduct('${product.product_id}')"><i class="fas fa-trash-alt"></i></button>
-                        <button class="btn btn-outline-warning btn-sm edit" title="Sửa" onclick="editProduct('${product.product_id}')"><i class="fa fa-edit"></i></button>
-                    </td>
-                </tr>`;
+        const safeImage = product.product_image ? product.product_image : '';
+        const safeCategory = product.category_name ? product.category_name : product.category_id;
+        const safeSupplier = product.supplier_name ? product.supplier_name : product.supplier_id;
+        const row = `
+            <tr>
+                <td>${product.product_id}</td>
+                <td>${product.product_name}</td>
+                <td>${safeCategory}</td>
+                <td>${safeImage ? `<img src="../img/${safeImage}" alt="${product.product_name}" width="50">` : ''}</td>
+                <td>${product.product_price}</td>
+                <td>${product.product_status}</td>
+                <td>
+                    <button class="btn btn-outline-danger btn-sm trash" title="Xóa" onclick="deleteProduct('${product.product_id}')"><i class="fas fa-trash-alt"></i></button>
+                    <button class="btn btn-outline-warning btn-sm edit" title="Sửa" onclick="editProduct('${product.product_id}')"><i class="fa fa-edit"></i></button>
+                </td>
+            </tr>`;
         productTable.innerHTML += row;
     });
 
@@ -86,7 +87,7 @@ function deleteProduct(productId) {
     $('#confirmDelete').off('click').on('click', function() {
         console.log("Xóa sản phẩm với trạng thái:", product.product_status);
         
-        fetch('delete_product.php', {
+        fetch('../controllers/delete_product.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',

@@ -86,7 +86,6 @@ if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'Nhân viên') 
                     <th>Mã sản phẩm</th>
                     <th>Tên sản phẩm</th>
                     <th>Loại sản phẩm</th>
-                    <th>Nhà cung cấp</th>
                     <th>Ảnh</th>
                     <th>Giá</th>
                     <th>Trạng thái</th>
