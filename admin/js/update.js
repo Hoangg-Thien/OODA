@@ -20,7 +20,7 @@ document.getElementById("saveBtn").addEventListener("click", function () {
     }
 
     // Gửi dữ liệu
-    fetch("update_product.php", {
+    fetch("../controllers/update_product.php", {
         method: "POST",
         body: formData
     })

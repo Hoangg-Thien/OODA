@@ -10,13 +10,13 @@ if (!isset($_SESSION['user_name']) || empty($_SESSION['user_name'])) {
 }
 
 // Kiểm tra xem người dùng có quyền admin không
-if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'Quản lý') {
+if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'Nhân viên') {
     // Không có quyền admin, chuyển hướng về trang chính
     header("Location: /admin/index.php");
     exit();
 }
 
-require 'connect.php';
+require '../config/connect.php';
  
 $where_clause = "";
 

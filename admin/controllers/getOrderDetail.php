@@ -1,5 +1,5 @@
 <?php
-require 'connect.php';
+require '../config/connect.php';
 header('Content-Type: application/json');
 
 if (isset($_GET['order_id'])) {

@@ -4,8 +4,7 @@ ini_set('display_errors', 1);
 header('Content-Type: application/json');
 
 
-require "connect.php";
-
+require '../config/connect.php';
 $product_id = $_POST['product_id'];
 $product_name = $_POST['product_name'];
 $product_price = $_POST['product_price'];

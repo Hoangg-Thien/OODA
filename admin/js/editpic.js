@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 formData.append("image", imageUpload.files[0]);
                 formData.append("product_id", 1); // Thay ID sản phẩm bằng ID thực tế
 
-                fetch("update_image.php", {
+                fetch("../controllers/update_image.php", {
                     method: "POST",
                     body: formData
                 })

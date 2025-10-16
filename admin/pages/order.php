@@ -10,13 +10,13 @@ if (!isset($_SESSION['user_name']) || empty($_SESSION['user_name'])) {
 }
 
 // Kiểm tra xem người dùng có quyền admin không
-if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'Quản lý') {
+if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'Nhân viên') {
     // Không có quyền admin, chuyển hướng về trang chính
     header("Location: /admin/index.php");
     exit();
 }
 
-require 'connect.php';
+require '../config/connect.php';
 
 $sql = "SELECT * FROM province";
 $result = mysqli_query($conn, $sql);
@@ -72,7 +72,7 @@ if (isset($_GET['dateout']) && !empty($_GET['dateout'])) {
 
 $order_sql = "SELECT hd.*, nd.fullname, nd.district, nd.province, nd.user_address 
               FROM hoadon hd 
-              LEFT JOIN nguoidung nd ON hd.user_name = nd.user_name
+              LEFT JOIN nguoidung nd ON hd.creator = nd.user_name
               WHERE 1=1 $where_clause
               ORDER BY hd.order_date DESC";
 
@@ -98,7 +98,7 @@ $offset = ($page - 1) * $limit;
 
 $order_sql = "SELECT hd.*, nd.fullname, nd.district, nd.province, nd.user_address 
               FROM hoadon hd 
-              LEFT JOIN nguoidung nd ON hd.user_name = nd.user_name
+              LEFT JOIN nguoidung nd ON hd.creator = nd.user_name
               WHERE 1=1 $where_clause
               ORDER BY hd.order_date DESC
               LIMIT $limit OFFSET $offset"; 

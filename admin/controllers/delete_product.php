@@ -1,6 +1,6 @@
 <?php
 header('Content-Type: application/json');
-require "connect.php";
+require '../config/connect.php';
 
 $product_id = $_POST['product_id'] ?? null;
 $status = $_POST['status'] ?? null;

@@ -1,5 +1,5 @@
 <?php
-require 'connect.php';
+require '../config/connect.php';
 
 // Kiểm tra dữ liệu nhận được
 if(empty($_POST['username']) || empty($_POST['password']) || empty($_POST['fullname']) || 

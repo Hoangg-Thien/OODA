@@ -1,6 +1,6 @@
 <?php
 header('Content-Type: application/json');
-require 'connect.php';
+require '../config/connect.php';
 
 // Lấy tất cả sản phẩm, bao gồm cả sản phẩm bị ẩn
 $result = $conn->query("SELECT * FROM sanpham");

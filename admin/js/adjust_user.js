@@ -14,7 +14,7 @@ $(document).ready(function () {
         var username = row.find("td:eq(0)").text();
         
         $.ajax({
-            url: "get_user_pro_dis.php",
+            url: "../controllers/get_user_pro_dis.php",
             type: "POST",
             data: {
                 username: username
@@ -51,7 +51,7 @@ $(document).ready(function () {
         var province = $("#edit_province").val();
 
         $.ajax({
-            url: "update_user.php",
+            url: "../controllers/update_user.php",
             type: "POST",
             data: {
                 username: username,
@@ -97,7 +97,7 @@ $(document).ready(function () {
         var username = $("#ModalRL").data("username");
         
         $.ajax({
-            url: "lock_user.php",
+            url: "../controllers/lock_user.php",
             type: "POST",
             data: {
                 username: username,
@@ -133,7 +133,7 @@ $(document).ready(function () {
         var username = $("#ModalRM").data("username");
         
         $.ajax({
-            url: "lock_user.php",
+            url: "../controllers/lock_user.php",
             type: "POST",
             data: {
                 username: username,
@@ -182,7 +182,7 @@ $(document).ready(function () {
         }
         
         $.ajax({
-            url: "add_user.php",
+            url: "../controllers/add_user.php",
             type: "POST",
             data: {
                 username: username,

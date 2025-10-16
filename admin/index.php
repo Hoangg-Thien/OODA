@@ -1,7 +1,7 @@
 <?php
 session_name('ADMINSESSID');
 session_start();
-require './pages/connect.php';
+require './config/connect.php';
 
 if (isset($_POST['login'])) {
     $username = mysqli_real_escape_string($conn, $_POST['user']);
@@ -14,7 +14,7 @@ if (isset($_POST['login'])) {
         $user = $result->fetch_assoc();
 
         if (password_verify($password, $user['hashPass'])) {
-            if ($user['user_role'] === 'Quản lý') {
+            if ($user['user_role'] === 'Nhân viên') {
                 $_SESSION['fullname'] = $user['user_name'];
                 $_SESSION['user_name'] = $user['user_name'];
                 $_SESSION['user_role'] = $user['user_role'];

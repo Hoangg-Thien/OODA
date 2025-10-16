@@ -1,7 +1,7 @@
 <?php
 session_name('ADMINSESSID');
 session_start();
-require 'connect.php';
+require '../config/connect.php';
 
 if (!isset($_GET['id']) || empty($_GET['id'])) {
     header('Location: satistics.php');

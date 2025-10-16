@@ -10,13 +10,13 @@ if (!isset($_SESSION['user_name']) || empty($_SESSION['user_name'])) {
 }
 
 // Kiểm tra xem người dùng có quyền admin không
-if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'Quản lý') {
+if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'Nhân viên') {
     // Không có quyền admin, chuyển hướng về trang chính
     header("Location: /admin/index.php");
     exit();
 }
 
-require 'connect.php';
+require '../config/connect.php';
 
 $sql = "SELECT user_name, fullname, user_address, user_email, phone, user_role, user_status, district, province FROM nguoidung";
 $result = $conn->query($sql);
@@ -26,7 +26,7 @@ $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $limit = 4; 
 $offset = ($page - 1) * $limit;
 
-$sql = "SELECT user_name, fullname, user_address, user_email, phone, user_role, user_status, district, province FROM nguoidung LIMIT $limit OFFSET $offset";
+$sql = "SELECT user_name, fullname, user_address, user_email, phone, user_role, user_status FROM nguoidung LIMIT $limit OFFSET $offset";
 $result = $conn->query($sql);
 
 // Lấy tổng số người dùng để tính số trang
@@ -379,7 +379,7 @@ $province_result = $conn->query($province_sql);
                             <label class="control-label">Vai trò</label>
                             <select class="form-control" id="role">
                             <option value="Khách hàng">Khách hàng</option>
-                            <option value="Quản lý">Quản lý</option>
+                            <option value="Nhân viên">Nhân viên</option>
                             </select>
                         </div>
                     </div>
@@ -403,7 +403,7 @@ $province_result = $conn->query($province_sql);
             var province_id = $(this).val();
             if(province_id != ''){
                 $.ajax({
-                    url: 'get_district.php',
+                    url: '../controllers/get_district.php',
                     type: 'GET',
                     dataType: 'json',  
                     data: {province_id: province_id},

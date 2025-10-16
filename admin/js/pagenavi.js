@@ -3,7 +3,7 @@ let currentPage = 1;
 const itemsPerPage = 10;
 
 function fetchAllProducts() {
-    fetch('get_all_products.php')
+    fetch('../controllers/get_all_products.php')
         .then(response => response.json())
         .then(data => {
             products = data;
@@ -36,10 +36,11 @@ function displayProducts(page) {
                 <tr>
                     <td>${product.product_id}</td>
                     <td>${product.product_name}</td>
-                    <td>echo '<img src="../img/' . htmlspecialchars($row['product_image']) . '" alt="' . htmlspecialchars($row['product_name']) . '" width="50">';
-</td>
+                    <td>${product.category_id}</td>
+                    <td>${product.supplier_id}</td>
+                    <td>echo '<img src="../img/' . htmlspecialchars($row['product_image']) . '" alt="' . htmlspecialchars($row['product_name']) . '" width="50">';</td>
                     <td>${product.product_price}</td>
-                    <td>${product.product_type}</td>
+                    <td>${product.product_status}</td>
                     <td>
                         <button class="btn btn-outline-danger btn-sm trash" title="Xóa" onclick="deleteProduct('${product.product_id}')"><i class="fas fa-trash-alt"></i></button>
                         <button class="btn btn-outline-warning btn-sm edit" title="Sửa" onclick="editProduct('${product.product_id}')"><i class="fa fa-edit"></i></button>
@@ -125,7 +126,7 @@ function deleteProduct(productId) {
 
 // Sửa sản phẩm
 function editProduct(productId) {
-    fetch(`get_product.php?id=${productId}`)
+    fetch(`../controllers/get_product.php?id=${productId}`)
         .then(response => response.json())
         .then(data => {
             if (data.error) {
@@ -137,7 +138,6 @@ function editProduct(productId) {
             document.getElementById("product-name").value = data.product_name;
             document.getElementById("product-price").value = data.product_price;
             document.getElementById("product-status").value = data.product_status;
-            document.getElementById("product-type").value = data.product_type;
             document.getElementById("product-image").src = `../img/${data.product_image}`;
 
             $("#editModal").modal("show");

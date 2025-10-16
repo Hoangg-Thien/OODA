@@ -1,5 +1,5 @@
 <?php 
-    require 'connect.php';
+   require '../config/connect.php';
     
     $province_id = $_GET['province_id'];
     

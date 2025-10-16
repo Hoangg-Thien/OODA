@@ -1,5 +1,5 @@
 <?php
-require 'connect.php';
+require '../config/connect.php';
 session_name('ADMINSESSID');
 session_start();
 if (!isset($_GET['id']) || empty($_GET['id'])) {

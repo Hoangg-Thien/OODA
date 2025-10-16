@@ -1,5 +1,5 @@
 <?php
-    require_once 'connect.php';
+    require_once '../config/connect.php';
 
     if($_SERVER["REQUEST_METHOD"] == "POST"){
         $product_code = $_POST['product-code'];

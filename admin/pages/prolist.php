@@ -10,7 +10,7 @@ if (!isset($_SESSION['user_name']) || empty($_SESSION['user_name'])) {
 }
 
 // Kiểm tra xem người dùng có quyền admin không
-if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'Quản lý') {
+if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'Nhân viên') {
     // Không có quyền admin, chuyển hướng về trang chính
     header("Location: /admin/index.php");
     exit();
@@ -85,9 +85,11 @@ if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'Quản lý') {
                 <tr>
                     <th>Mã sản phẩm</th>
                     <th>Tên sản phẩm</th>
+                    <th>Loại sản phẩm</th>
+                    <th>Nhà cung cấp</th>
                     <th>Ảnh</th>
                     <th>Giá</th>
-                    <th>Danh mục</th>
+                    <th>Trạng thái</th>
                     <th>Chức năng</th>
                 </tr>
             </thead>
