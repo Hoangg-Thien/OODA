@@ -70,9 +70,10 @@ if (isset($_GET['dateout']) && !empty($_GET['dateout'])) {
     $where_clause .= " AND DATE(hd.order_date) <= '$date_out'";
 }
 
-$order_sql = "SELECT hd.*, nd.fullname, nd.district, nd.province, nd.user_address 
+$order_sql = "SELECT hd.*, nd.fullname, 
+              nd.district AS user_district, nd.province AS user_province, nd.user_address AS profile_address 
               FROM hoadon hd 
-              LEFT JOIN nguoidung nd ON hd.creator = nd.user_name
+              LEFT JOIN nguoidung nd ON hd.name = nd.user_name
               WHERE 1=1 $where_clause
               ORDER BY hd.order_date DESC";
 
@@ -96,9 +97,10 @@ $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $limit = 5;
 $offset = ($page - 1) * $limit; 
 
-$order_sql = "SELECT hd.*, nd.fullname, nd.district, nd.province, nd.user_address 
+$order_sql = "SELECT hd.*, nd.fullname, 
+              nd.district AS user_district, nd.province AS user_province, nd.user_address AS profile_address 
               FROM hoadon hd 
-              LEFT JOIN nguoidung nd ON hd.creator = nd.user_name
+              LEFT JOIN nguoidung nd ON hd.name = nd.user_name
               WHERE 1=1 $where_clause
               ORDER BY hd.order_date DESC
               LIMIT $limit OFFSET $offset"; 
@@ -265,27 +267,43 @@ $total_pages = ceil($total_orders / $limit);
                         <td><?php echo $order['fullname']; ?></td>
                         <td>
                             <?php 
+                            // Ưu tiên dữ liệu địa chỉ từ hóa đơn (hd), nếu thiếu mới fallback qua hồ sơ người dùng (nd)
+                            $street = '';
+                            if (isset($order['address']) && trim($order['address']) !== '') {
+                                $street = $order['address'];
+                            } elseif (isset($order['profile_address']) && trim($order['profile_address']) !== '') {
+                                $street = $order['profile_address'];
+                            }
+
+                            $district = '';
+                            if (isset($order['district']) && trim($order['district']) !== '') {
+                                $district = $order['district'];
+                            } elseif (isset($order['user_district'])) {
+                                $district = $order['user_district'];
+                            }
+
+                            $province = '';
+                            if (isset($order['province']) && trim($order['province']) !== '') {
+                                $province = $order['province'];
+                            } elseif (isset($order['user_province'])) {
+                                $province = $order['user_province'];
+                            }
+
+                            // Chuẩn hóa khoảng trắng và loại bỏ phần rỗng/trùng lặp
+                            $rawParts = [
+                                preg_replace('/\s+/', ' ', trim((string)$street)),
+                                preg_replace('/\s+/', ' ', trim((string)$district)),
+                                preg_replace('/\s+/', ' ', trim((string)$province)),
+                            ];
+
                             $address_parts = [];
-                            
-                            if (!empty($order['address'])) {
-                                $address_parts[] = $order['address'];
-                            } else if (!empty($order['user_address'])) {
-                                $address_parts[] = $order['user_address'];
+                            foreach ($rawParts as $p) {
+                                if ($p !== '' && !in_array($p, $address_parts, true)) {
+                                    $address_parts[] = $p;
+                                }
                             }
-                            
-                            if (!empty($order['district'])) {
-                                $address_parts[] = $order['district'];
-                            }
-                            
-                            if (!empty($order['province'])) {
-                                $address_parts[] = $order['province'];
-                            }
-                            
-                            if (!empty($address_parts)) {
-                                echo implode(', ', $address_parts);
-                            } else {
-                                echo "Không có địa chỉ";
-                            }
+
+                            echo !empty($address_parts) ? implode(', ', $address_parts) : 'Không có địa chỉ';
                             ?>
                         </td>
                         <td>
@@ -376,7 +394,7 @@ $total_pages = ceil($total_orders / $limit);
     ?>
 
     <!--edit-->
-    <form action="getOrderDetail.php" method="POST" enctype="multipart/form-data">
+    <form action="../controllers/getOrderDetail.php" method="POST" enctype="multipart/form-data">
         <div class="modal fade" id="ModalUP" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
@@ -489,7 +507,7 @@ $total_pages = ceil($total_orders / $limit);
             <?php if(isset($_GET['province']) && !empty($_GET['province'])): ?>
             $('#province').val('<?php echo $_GET['province']; ?>');
             $.ajax({
-                url: '../pages/get_district.php',
+                url: '../controllers/get_district.php',
                 method: 'GET',
                 dataType: "json",
                 data: {
@@ -514,7 +532,7 @@ $total_pages = ceil($total_orders / $limit);
                 var order_id = $(this).closest('tr').find('td:first-child').text();
                 
                 $.ajax({
-                    url: 'getOrderDetail.php',
+                    url: '../controllers/getOrderDetail.php',
                     type: 'GET',
                     data: { order_id: order_id },
                     dataType: 'json',
@@ -598,7 +616,7 @@ $total_pages = ceil($total_orders / $limit);
                 }
                 
                 $.ajax({
-                    url: 'updateOrderStatus.php',
+                    url: '../controllers/updateOrderStatus.php',
                     type: 'POST',
                     data: { 
                         order_id: order_id,

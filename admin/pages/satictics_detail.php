@@ -13,7 +13,7 @@ $order_id = mysqli_real_escape_string($conn, $_GET['id']);
 // Lấy thông tin chi tiết đơn hàng
 $order_sql = "SELECT hd.*, nd.fullname, nd.phone, nd.district, nd.province, nd.user_address
               FROM hoadon hd 
-              LEFT JOIN nguoidung nd ON hd.user_name = nd.user_name
+              LEFT JOIN nguoidung nd ON hd.name = nd.user_name
               WHERE hd.order_id = '$order_id'";
 
 $order_result = mysqli_query($conn, $order_sql);

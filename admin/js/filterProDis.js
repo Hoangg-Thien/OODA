@@ -6,7 +6,7 @@ $(document).ready(function() {
       if (province_id) {
         // If a province is selected, fetch the districts for that province using AJAX
         $.ajax({
-          url: '../pages/get_district.php',
+          url: '../controllers/get_district.php',
           method: 'GET',
           dataType: "json",
           data: {

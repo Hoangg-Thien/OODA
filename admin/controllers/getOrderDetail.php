@@ -8,7 +8,7 @@ if (isset($_GET['order_id'])) {
     // Lấy thông tin đơn hàng và thông tin người dùng
     $sql = "SELECT hd.*, nd.fullname, nd.user_name, nd.user_address, nd.district, nd.province
             FROM hoadon hd
-            LEFT JOIN nguoidung nd ON hd.user_name = nd.user_name
+            LEFT JOIN nguoidung nd ON hd.name = nd.user_name
             WHERE hd.order_id = ?";
     
     $stmt = mysqli_prepare($conn, $sql);

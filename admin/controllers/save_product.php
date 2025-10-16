@@ -2,23 +2,16 @@
     require_once '../config/connect.php';
 
     if($_SERVER["REQUEST_METHOD"] == "POST"){
-        $product_code = $_POST['product-code'];
-        $product_name = $_POST['product-name'];
-        $type = $_POST['type'];
-        $price = $_POST['price'];   
-        $status = $_POST['status'];
+        $product_code = isset($_POST['product-code']) ? trim($_POST['product-code']) : '';
+        $product_name = isset($_POST['product-name']) ? trim($_POST['product-name']) : '';
+        $type = isset($_POST['type']) ? $_POST['type'] : '';
+        $price = isset($_POST['price']) ? $_POST['price'] : '';
+        $status = isset($_POST['status']) ? $_POST['status'] : '';
 
-        // Map tên loại -> category_id
+        // Nhận trực tiếp category_id từ form (select value)
         $category_id = 0;
-        if (!empty($type)) {
-            $map = $conn->prepare("SELECT category_id FROM loaisanpham WHERE name_type = ? LIMIT 1");
-            $map->bind_param("s", $type);
-            $map->execute();
-            $res = $map->get_result();
-            if ($row = $res->fetch_assoc()) {
-                $category_id = (int)$row['category_id'];
-            }
-            $map->close();
+        if (!empty($type) && is_numeric($type)) {
+            $category_id = (int)$type;
         }
 
         // Xử lý hình ảnh: lưu file với timestamp, lưu vào DB chỉ tên file
@@ -42,15 +35,13 @@
 
         // Lấy supplier_id từ form nếu có, mặc định 1
         $supplier_id = 1;
-        if (isset($_POST['supplier_id']) && is_numeric($_POST['supplier_id'])) {
-            $supplier_id = (int)$_POST['supplier_id'];
-        } elseif (isset($_POST['supplier']) && is_numeric($_POST['supplier'])) {
+        if (isset($_POST['supplier']) && is_numeric($_POST['supplier'])) {
             $supplier_id = (int)$_POST['supplier'];
         }
 
-        // product_link, productnolog_link và mô tả tạm rỗng nếu form chưa có
-        $product_link = '';
-        $productnolog_link = '';
+        // Nhận các trường mô tả và liên kết
+        $product_link = isset($_POST['product_link']) ? trim($_POST['product_link']) : '';
+        $productnolog_link = isset($_POST['productnolog_link']) ? trim($_POST['productnolog_link']) : '';
         $product_description = isset($_POST['product_description']) ? (string)$_POST['product_description'] : '';
 
         // (product_id, category_id, supplier_id, product_name, product_image, product_status, product_price, product_description, product_link, productnolog_link, hidden)

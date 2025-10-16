@@ -15,6 +15,28 @@ if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'Nhân viên') 
     header("Location: /admin/index.php");
     exit();
 }
+
+require_once '../config/connect.php';
+
+// Lấy danh sách danh mục và nhà cung cấp
+$categories = [];
+$suppliers = [];
+
+$resCate = $conn->query("SELECT category_id, name_type FROM loaisanpham ORDER BY name_type ASC");
+if ($resCate) {
+	while ($row = $resCate->fetch_assoc()) {
+		$categories[] = $row;
+	}
+	$resCate->free();
+}
+
+$resSupp = $conn->query("SELECT supplier_id, supplier_name FROM nhacungcap WHERE status='Hoạt động' ORDER BY supplier_name ASC");
+if ($resSupp) {
+	while ($row = $resSupp->fetch_assoc()) {
+		$suppliers[] = $row;
+	}
+	$resSupp->free();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -82,13 +104,13 @@ if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'Nhân viên') 
                         <input type="text" id="product-name" name="product-name">
                     </div>
                     <div class="form-group">
-                        <label for="type">Danh mục</label>
-                            <select id="type" name="type">
-                                <option value="">-- Chọn danh mục --</option>
-                                <option value="Trái cây Ngon">Trái cây Ngon</option>
-                                <option value="Trái cây Việt">Trái cây Việt</option>
-                                <option value="Trái cây Nhập Khẩu">Trái cây Nhập Khẩu</option>
-                            </select>
+                                <label for="type">Danh mục</label>
+                                    <select id="type" name="type">
+                                        <option value="">-- Chọn danh mục --</option>
+<?php foreach ($categories as $c): ?>
+                                        <option value="<?php echo (int)$c['category_id']; ?>"><?php echo htmlspecialchars($c['name_type']); ?></option>
+<?php endforeach; ?>
+                                    </select>
                     </div>
                 </div>
                 
@@ -97,6 +119,15 @@ if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'Nhân viên') 
                         <label for="price">Giá bán</label>
                         <input type="text" id="price" name="price">
                     </div>
+                            <div class="form-group">
+                                <label for="supplier">Nhà cung cấp</label>
+                                    <select id="supplier" name="supplier">
+                                        <option value="">-- Chọn nhà cung cấp --</option>
+<?php foreach ($suppliers as $s): ?>
+                                        <option value="<?php echo (int)$s['supplier_id']; ?>"><?php echo htmlspecialchars($s['supplier_name']); ?></option>
+<?php endforeach; ?>
+                                    </select>
+                            </div>
                     <div class="form-group">
                         <label for="status">Tình trạng</label>
                         <select id="status" name="status">
@@ -105,7 +136,7 @@ if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'Nhân viên') 
                             <option value="Ẩn">Ẩn</option>
                         </select>
                     </div>
-                    <div class="form-group">
+                            <div class="form-group">
                         <label for="product-image">Ảnh sản phẩm</label>
                         <div class="image-upload-container">
                             <input  type="file" id="product-image" name="product-image" accept="image/*" onchange="previewImage(this)"> 
