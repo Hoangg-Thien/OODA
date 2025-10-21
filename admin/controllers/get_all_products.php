@@ -1,35 +1,20 @@
 <?php
 header('Content-Type: application/json');
-require '../config/connect.php';
+require '../classes/Database.php';
+require '../classes/Product.php';
 
-// Lấy tất cả sản phẩm
-$sql = "
-    SELECT 
-        sp.product_id,
-        sp.product_name,
-        sp.product_image,
-        sp.product_status,
-        sp.product_price,
-        sp.hidden,
-        sp.category_id,
-        sp.supplier_id,
-        lsp.name_type AS category_name,
-        ncc.supplier_name AS supplier_name
-    FROM sanpham sp
-    LEFT JOIN loaisanpham lsp ON lsp.category_id = sp.category_id
-    LEFT JOIN nhacungcap ncc ON ncc.supplier_id = sp.supplier_id
-    ORDER BY sp.product_id
-";
+// ✅ Tạo đối tượng Database và lấy kết nối
+$db = new Database();
+$conn = $db->getConnection();
 
-$result = $conn->query($sql);
+// Tạo đối tượng Product
+$product = new Product($conn);
 
-$products = [];
-if ($result) {
-    while ($row = $result->fetch_assoc()) {
-        $products[] = $row;
-    }
-}
+// Lấy danh sách sản phẩm
+$products = $product->getAll();
 
-echo json_encode($products);
+// Xuất JSON
+echo json_encode($products, JSON_UNESCAPED_UNICODE);
+
 $conn->close();
 ?>

@@ -1,47 +1,31 @@
 <?php
 session_name('ADMINSESSID');
 session_start();
-require '../config/connect.php';
+require '../classes/Database.php';
+require '../classes/OrderDetail.php';
 
+// Initialize database connection
+$db = new Database();
+$conn = $db->getConnection();
+
+// Validate order ID
 if (!isset($_GET['id']) || empty($_GET['id'])) {
     header('Location: satistics.php');
     exit;
 }
 
-$order_id = mysqli_real_escape_string($conn, $_GET['id']);
+// Create OrderDetail object
+$orderDetail = new OrderDetail($_GET['id']);
+$order = $orderDetail->getOrderInfo();
 
-// Lấy thông tin chi tiết đơn hàng
-$order_sql = "SELECT hd.*, nd.fullname, nd.phone, nd.district, nd.province, nd.user_address
-              FROM hoadon hd 
-              LEFT JOIN nguoidung nd ON hd.name = nd.user_name
-              WHERE hd.order_id = '$order_id'";
+// Order validation is handled in the class constructor
 
-$order_result = mysqli_query($conn, $order_sql);
-$order = mysqli_fetch_assoc($order_result);
-
-if (!$order) {
-    header('Location: satistics.php');
-    exit;
-}
-
-// Lấy chi tiết các sản phẩm trong đơn hàng
-$items_sql = "SELECT cthd.*, sp.product_name, sp.product_price
-              FROM chitiethoadon cthd
-              LEFT JOIN sanpham sp ON cthd.product_id = sp.product_id
-              WHERE cthd.order_id = '$order_id'";
-$items_result = mysqli_query($conn, $items_sql);
-
-// Tính tổng tiền
-$total_amount_sql = "SELECT SUM(cthd.quantity * sp.product_price) as total_amount
-                     FROM chitiethoadon cthd 
-                     JOIN sanpham sp ON cthd.product_id = sp.product_id 
-                     WHERE cthd.order_id = '$order_id'";
-$total_result = mysqli_query($conn, $total_amount_sql);
-$total_row = mysqli_fetch_assoc($total_result);
-$total_amount = $total_row['total_amount'];
-
-$order_date = date('d/m/Y', strtotime($order['order_date']));
-$order_time = date('H:i', strtotime($order['order_date']));
+// Get order details
+$items = $orderDetail->getOrderItems();
+$total_amount = $orderDetail->getTotalAmount();
+$order_date = $orderDetail->getFormattedDate();
+$order_time = $orderDetail->getFormattedTime();
+$status_class = $orderDetail->getStatusClass();
 
 ?>
 
@@ -50,7 +34,7 @@ $order_time = date('H:i', strtotime($order['order_date']));
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chi tiết hóa đơn #<?php echo $order_id; ?></title>
+    <title>Chi tiết hóa đơn #<?php echo htmlspecialchars($orderDetail->getOrderId()); ?></title>
     <link rel="stylesheet" href="./stylescss/satistics.css">
     <link rel="stylesheet" href="./stylescss/responsivestatistics.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -344,7 +328,7 @@ $order_time = date('H:i', strtotime($order['order_date']));
                 </div>
                 <div class="invoice-info">
                     <h1 class="invoice-title">HÓA ĐƠN</h1>
-                    <p class="invoice-subtitle">Mã đơn hàng: #<?php echo $order_id; ?></p>
+                    <p class="invoice-subtitle">Mã đơn hàng: #<?php echo htmlspecialchars($orderDetail->getOrderId()); ?></p>
                 </div>
             </div>
 
@@ -404,36 +388,28 @@ $order_time = date('H:i', strtotime($order['order_date']));
                     </thead>
                     <tbody>
                         <?php 
-                        if ($items_result && mysqli_num_rows($items_result) > 0) {
-                            while ($item = mysqli_fetch_assoc($items_result)) {
-                                $product_id = $item['product_id'];
-                                $image_sql = "SELECT product_image FROM sanpham WHERE product_id = '$product_id'";
-                                $image_result = mysqli_query($conn, $image_sql);
-                                $image_row = mysqli_fetch_assoc($image_result);
-                                $image_file = isset($image_row['product_image']) ? $image_row['product_image'] : 'default.jpg';
-                                $image_path = "../img/" . $image_file;
-                                
+                        if ($items && mysqli_num_rows($items) > 0): 
+                            while ($item = mysqli_fetch_assoc($items)):
                                 $quantity = isset($item['quantity']) ? $item['quantity'] : 1;
                                 $price = $item['product_price'];
                                 $subtotal = $quantity * $price;
+                                $image_path = "../img/" . ($item['product_image'] ?? 'default.jpg');
                         ?>
-                        <tr>
-                            <td><img src="<?php echo $image_path; ?>" alt="<?php echo $item['product_name']; ?>" class="item-image"></td>
-                            <td><strong><?php echo $item['product_name']; ?></strong></td>
-                            <td><?php echo number_format($price, 0, ',', '.'); ?>đ</td>
-                            <td><?php echo $quantity; ?>kg</td>
-                            <td style="text-align: right;"><?php echo number_format($subtotal, 0, ',', '.'); ?>đ</td>
-                        </tr>
-                        <?php
-                            }
-                        } else {
+                                <tr>
+                                    <td><img src="<?php echo htmlspecialchars($image_path); ?>" alt="<?php echo htmlspecialchars($item['product_name']); ?>" class="item-image"></td>
+                                    <td><strong><?php echo htmlspecialchars($item['product_name']); ?></strong></td>
+                                    <td><?php echo number_format($price, 0, ',', '.'); ?>đ</td>
+                                    <td><?php echo $quantity; ?>kg</td>
+                                    <td style="text-align: right;"><?php echo number_format($subtotal, 0, ',', '.'); ?>đ</td>
+                                </tr>
+                        <?php 
+                            endwhile;
+                        else: 
                         ?>
-                        <tr>
-                            <td colspan="5">Không có sản phẩm nào</td>
-                        </tr>
-                        <?php
-                        }
-                        ?>
+                            <tr>
+                                <td colspan="5">Không có sản phẩm nào</td>
+                            </tr>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </div>

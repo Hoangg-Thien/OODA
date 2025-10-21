@@ -16,103 +16,31 @@ if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'Nhân viên') 
     exit();
 }
 
-require '../config/connect.php';
+require '../classes/Database.php';
+require '../classes/Order.php';
 
-$sql = "SELECT * FROM province";
-$result = mysqli_query($conn, $sql);
+$db = new Database();
+$orderService = new Order($db);
 
-if (isset($_POST['add_sale'])) {
-    echo "<pre>";
-    print_r($_POST);
-    die();
-}
+$provinces = $orderService->getProvinces();
 
-// lọc theo tỉnh/thành và quận/huyện
-$where_clause = "";
-if (isset($_GET['province']) && !empty($_GET['province'])) {
-    $province_id = $_GET['province'];
-    // Lấy tên tỉnh/thành từ ID
-    $province_sql = "SELECT name FROM province WHERE province_id = '$province_id'";
-    $province_result = mysqli_query($conn, $province_sql);
-    if ($province_result && mysqli_num_rows($province_result) > 0) {
-        $province_data = mysqli_fetch_assoc($province_result);
-        $province_name = mysqli_real_escape_string($conn, trim($province_data['name']));
-        $where_clause .= " AND (hd.province LIKE '%$province_name%' OR hd.address LIKE '%$province_name%')";
-    }
-}
-
-if (isset($_GET['district']) && !empty($_GET['district'])){
-    $district_id = $_GET['district'];
-    // Lấy tên quận/huyện từ ID
-    $district_sql = "SELECT name FROM district WHERE district_id = '$district_id'";
-    $district_result = mysqli_query($conn, $district_sql);
-    if ($district_result && mysqli_num_rows($district_result) > 0) {
-        $district_data = mysqli_fetch_assoc($district_result);
-        $district_name = mysqli_real_escape_string($conn, trim($district_data['name']));
-        $where_clause .= " AND (hd.district LIKE '%$district_name%' OR hd.address LIKE '%$district_name%')";
-    }
-}
-
-// Lọc theo trạng thái
-if (isset($_GET['status']) && !empty($_GET['status']) && $_GET['status'] !== 'all') {
-    $status = mysqli_real_escape_string($conn, $_GET['status']);
-    $where_clause .= " AND hd.order_status = '$status'";
-}
-
-// Lọc theo ngày
-if (isset($_GET['datein']) && !empty($_GET['datein'])) {
-    $date_in = mysqli_real_escape_string($conn, $_GET['datein']);
-    $where_clause .= " AND DATE(hd.order_date) >= '$date_in'";
-}
-
-if (isset($_GET['dateout']) && !empty($_GET['dateout'])) {
-    $date_out = mysqli_real_escape_string($conn, $_GET['dateout']);
-    $where_clause .= " AND DATE(hd.order_date) <= '$date_out'";
-}
-
-$order_sql = "SELECT hd.*, nd.fullname, 
-              nd.district AS user_district, nd.province AS user_province, nd.user_address AS profile_address 
-              FROM hoadon hd 
-              LEFT JOIN nguoidung nd ON hd.name = nd.user_name
-              WHERE 1=1 $where_clause
-              ORDER BY hd.order_date DESC";
-
-$order_result = mysqli_query($conn, $order_sql);
-
-$status_map_to_code = [
-    'Chưa xác nhận' => 'pending',
-    'Đã xác nhận' => 'confirmed',
-    'Giao thành công' => 'completed',
-    'Đã hủy' => 'cancelled'
-];
-
-$status_map_to_text = [
-    'pending' => 'Chưa xác nhận',
-    'confirmed' => 'Đã xác nhận',
-    'completed' => 'Giao thành công',
-    'cancelled' => 'Đã hủy'
-];
+// Read filters from GET and pass to service
+$filters = [];
+if (isset($_GET['province']) && $_GET['province'] !== '') $filters['province'] = $_GET['province'];
+if (isset($_GET['district']) && $_GET['district'] !== '') $filters['district'] = $_GET['district'];
+if (isset($_GET['status']) && $_GET['status'] !== '') $filters['status'] = $_GET['status'];
+if (isset($_GET['datein']) && $_GET['datein'] !== '') $filters['datein'] = $_GET['datein'];
+if (isset($_GET['dateout']) && $_GET['dateout'] !== '') $filters['dateout'] = $_GET['dateout'];
 
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $limit = 5;
-$offset = ($page - 1) * $limit; 
 
-$order_sql = "SELECT hd.*, nd.fullname, 
-              nd.district AS user_district, nd.province AS user_province, nd.user_address AS profile_address 
-              FROM hoadon hd 
-              LEFT JOIN nguoidung nd ON hd.name = nd.user_name
-              WHERE 1=1 $where_clause
-              ORDER BY hd.order_date DESC
-              LIMIT $limit OFFSET $offset"; 
+$order_result = $orderService->getOrders($filters, $page, $limit);
+$total_orders = $orderService->getTotalOrders($filters);
+$total_pages = (int)ceil($total_orders / $limit);
 
-$order_result = mysqli_query($conn, $order_sql);
-
-// Lấy tổng số đơn hàng để tính số trang
-$total_sql = "SELECT COUNT(*) as total FROM hoadon hd WHERE 1=1 $where_clause";
-$total_result = mysqli_query($conn, $total_sql);
-$total_row = mysqli_fetch_assoc($total_result);
-$total_orders = $total_row['total'];
-$total_pages = ceil($total_orders / $limit);
+$status_map_to_code = Order::statusMapToCode();
+$status_map_to_text = Order::statusMapToText();
 
 ?>
 
@@ -195,13 +123,9 @@ $total_pages = ceil($total_orders / $limit);
                 <label for="locationFilter">Thành Phố/ Tỉnh</label>
                 <select id="province" name="province" class="form-control">
                 <option value="">Chọn một tỉnh/thành phố</option>
-                <?php
-                            while ($row = mysqli_fetch_assoc($result)) {
-                            ?>
-                                <option value="<?php echo $row['province_id'] ?>"><?php echo $row['name'] ?></option>
-                            <?php
-                            }
-                            ?>
+                <?php foreach ($provinces as $row): ?>
+                    <option value="<?php echo htmlspecialchars($row['province_id']); ?>"><?php echo htmlspecialchars($row['name']); ?></option>
+                <?php endforeach; ?>
                 </select>
             </div>
                 <div class="form-group">
@@ -241,13 +165,13 @@ $total_pages = ceil($total_orders / $limit);
                 </thead>
                 <tbody>
                     <?php
-                    if ($order_result && mysqli_num_rows($order_result) > 0) {
-                        while ($order = mysqli_fetch_assoc($order_result)) {
+                    if (!empty($order_result)) {
+                        foreach ($order_result as $order) {
                             $order_id = $order['order_id'];
-                            
+
                             $status_class = '';
                             $status_text = '';
-                            
+
                             if (isset($status_map_to_text[$order['order_status']])) {
                                 $status_class = $order['order_status'];
                                 $status_text = $status_map_to_text[$order['order_status']];
@@ -258,68 +182,19 @@ $total_pages = ceil($total_orders / $limit);
                                 $status_class = 'pending';
                                 $status_text = 'Chưa xác nhận';
                             }
-                            
+
                             $date = date('d/m/Y', strtotime($order['order_date']));
                             $time = date('H:i', strtotime($order['order_date']));
                     ?>
                     <tr>
-                        <td><?php echo $order['order_id']; ?></td>
-                        <td><?php echo $order['fullname']; ?></td>
-                        <td>
-                            <?php 
-                            // Ưu tiên dữ liệu địa chỉ từ hóa đơn (hd), nếu thiếu mới fallback qua hồ sơ người dùng (nd)
-                            $street = '';
-                            if (isset($order['address']) && trim($order['address']) !== '') {
-                                $street = $order['address'];
-                            } elseif (isset($order['profile_address']) && trim($order['profile_address']) !== '') {
-                                $street = $order['profile_address'];
-                            }
-
-                            $district = '';
-                            if (isset($order['district']) && trim($order['district']) !== '') {
-                                $district = $order['district'];
-                            } elseif (isset($order['user_district'])) {
-                                $district = $order['user_district'];
-                            }
-
-                            $province = '';
-                            if (isset($order['province']) && trim($order['province']) !== '') {
-                                $province = $order['province'];
-                            } elseif (isset($order['user_province'])) {
-                                $province = $order['user_province'];
-                            }
-
-                            // Chuẩn hóa khoảng trắng và loại bỏ phần rỗng/trùng lặp
-                            $rawParts = [
-                                preg_replace('/\s+/', ' ', trim((string)$street)),
-                                preg_replace('/\s+/', ' ', trim((string)$district)),
-                                preg_replace('/\s+/', ' ', trim((string)$province)),
-                            ];
-
-                            $address_parts = [];
-                            foreach ($rawParts as $p) {
-                                if ($p !== '' && !in_array($p, $address_parts, true)) {
-                                    $address_parts[] = $p;
-                                }
-                            }
-
-                            echo !empty($address_parts) ? implode(', ', $address_parts) : 'Không có địa chỉ';
-                            ?>
-                        </td>
-                        <td>
-                        <?php
-                            if ($status_text === 'Giao thành công') {
-                                $recipient_name = $order['fullname']; 
-                                echo htmlspecialchars($recipient_name);
-                            } else{
-                                echo $order['fullname'];
-                            }
-                            ?>
-                        </td>
-                        <td><span class="status <?php echo $status_class; ?>"><?php echo $status_text; ?></span></td>
+                        <td><?php echo htmlspecialchars($order['order_id']); ?></td>
+                        <td><?php echo htmlspecialchars($order['fullname']); ?></td>
+                        <td><?php echo htmlspecialchars(Order::formatAddress($order)); ?></td>
+                        <td><?php echo htmlspecialchars($order['fullname']); ?></td>
+                        <td><span class="status <?php echo htmlspecialchars($status_class); ?>"><?php echo htmlspecialchars($status_text); ?></span></td>
                         <td><?php echo $date; ?><br><?php echo $time; ?></td>
                         <td class="text-align-center">
-                        <a href="order_detail.php?id=<?php echo $order_id; ?>" class="btn btn-info btn-sm" style="background-color: #17ab1d; color: white; border: none; padding: 6px 12px; border-radius: 20px; text-decoration: none;">
+                        <a href="order_detail.php?id=<?php echo urlencode($order_id); ?>" class="btn btn-info btn-sm" style="background-color: #17ab1d; color: white; border: none; padding: 6px 12px; border-radius: 20px; text-decoration: none;">
                             <i class="fa-solid fa-circle-info"></i>
                         </a>
                             <button style="outline: none;" class="btn btn-outline-warning btn-sm edit m-1" type="button"
@@ -333,7 +208,7 @@ $total_pages = ceil($total_orders / $limit);
                     } else {
                     ?>
                     <tr>
-                        <td colspan="9" class="text-center">Không có đơn hàng nào</td>
+                        <td colspan="7" class="text-center">Không có đơn hàng nào</td>
                     </tr>
                     <?php
                     }

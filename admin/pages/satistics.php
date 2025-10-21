@@ -4,212 +4,35 @@ session_start();
 
 // Kiểm tra xem người dùng đã đăng nhập hay chưa
 if (!isset($_SESSION['user_name']) || empty($_SESSION['user_name'])) {
-    // Không cho phép truy cập trực tiếp, chuyển hướng về trang đăng nhập
     header("Location: /admin/index.php");
     exit();
 }
 
 // Kiểm tra xem người dùng có quyền admin không
 if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'Nhân viên') {
-    // Không có quyền admin, chuyển hướng về trang chính
     header("Location: /admin/index.php");
     exit();
 }
 
-require '../config/connect.php';
- 
-$where_clause = "";
+require_once '../classes/Database.php';
+require_once '../classes/Statistics.php';
 
-// Lọc theo ngày
-if (isset($_GET['datein']) && !empty($_GET['datein'])) {
-    $date_in = mysqli_real_escape_string($conn, $_GET['datein']);
-    $where_clause .= " AND DATE(hd.order_date) >= '$date_in'";
+$db = new Database();
+$statistics = new Statistics($db);
+
+// Áp dụng bộ lọc ngày nếu có
+if (isset($_GET['datein']) || isset($_GET['dateout'])) {
+    $statistics->setDateFilter(
+        $_GET['datein'] ?? null,
+        $_GET['dateout'] ?? null
+    );
 }
 
-if (isset($_GET['dateout']) && !empty($_GET['dateout'])) {
-    $date_out = mysqli_real_escape_string($conn, $_GET['dateout']);
-    $where_clause .= " AND DATE(hd.order_date) <= '$date_out'";
-}
-
-// Truy vấn để lấy tất cả đơn hàng
-$orders_sql = "SELECT hd.order_id, hd.order_date, nd.fullname, 
-              (SELECT SUM(cthd.quantity * sp.product_price) 
-               FROM chitiethoadon cthd 
-               JOIN sanpham sp ON cthd.product_id = sp.product_id 
-               WHERE cthd.order_id = hd.order_id) as total_amount
-              FROM hoadon hd 
-              LEFT JOIN nguoidung nd ON hd.name = nd.user_name
-              WHERE 1=1 AND hd.order_status = 'Giao thành công'
-              ORDER BY hd.order_date DESC";
-
-$orders_result = mysqli_query($conn, $orders_sql);
-
-// Mảng để lưu trữ khách hàng đã gộp
-$merged_customers = [];
-
-// Gộp khách hàng
-if ($orders_result && mysqli_num_rows($orders_result) > 0) {
-    while ($order = mysqli_fetch_assoc($orders_result)) {
-        $fullname = $order['fullname'];
-
-        // Nếu chưa có khách hàng này trong mảng gộp
-        if (!isset($merged_customers[$fullname])) {
-            $merged_customers[$fullname] = [
-                'fullname' => $fullname,
-                'orders' => [],
-                'total_amount' => 0,
-                'date_range' => []
-            ];
-        }
-
-        // Thêm đơn hàng vào khách hàng
-        $merged_customers[$fullname]['orders'][] = [
-            'order_id' => $order['order_id'],
-            'order_date' => $order['order_date'],
-            'total_amount' => $order['total_amount']
-        ];
-
-        // Cộng dồn tổng tiền
-        $merged_customers[$fullname]['total_amount'] += $order['total_amount'];
-    }
-}
-
-// Sắp xếp khách hàng theo tổng tiền giảm dần
-uasort($merged_customers, function($a, $b) {
-    return $b['total_amount'] <=> $a['total_amount'];
-});
-
-// Lấy 5 khách hàng có mức mua cao nhất
-$top_customers = array_slice($merged_customers, 0, 5);
-
-// Sắp xếp khách hàng theo tổng tiền giảm dần
-uasort($merged_customers, function($a, $b) {
-    return $b['total_amount'] <=> $a['total_amount'];
-});
-
-// Lấy 5 khách hàng có mức mua cao nhất
-$top_customers = array_slice($merged_customers, 0, 5);
-
-// Truy vấn để lấy 5 sản phẩm bán chạy nhất
-$top_products_sql = "SELECT sp.product_id, sp.product_name, sp.product_price, sp.product_image, 
-                    SUM(cthd.quantity) as total_sold,
-                    SUM(cthd.quantity * sp.product_price) as total_revenue
-                    FROM sanpham sp
-                    JOIN chitiethoadon cthd ON sp.product_id = cthd.product_id
-                    JOIN hoadon hd ON cthd.order_id = hd.order_id
-                    WHERE 1=1 AND hd.order_status = 'Giao thành công' $where_clause
-                    GROUP BY sp.product_id, sp.product_name, sp.product_price, sp.product_image
-                    ORDER BY total_sold DESC
-                    LIMIT 5";
-
-$top_products_result = mysqli_query($conn, $top_products_sql);
-$top_products = [];
-
-if ($top_products_result && mysqli_num_rows($top_products_result) > 0) {
-    while ($product = mysqli_fetch_assoc($top_products_result)) {
-        // Truy vấn đơn hàng liên quan đến sản phẩm
-        $product_orders_sql = "SELECT DISTINCT hd.order_id, hd.order_date, nd.fullname
-                      FROM hoadon hd
-                      JOIN chitiethoadon cthd ON hd.order_id = cthd.order_id
-                      LEFT JOIN nguoidung nd ON hd.name = nd.user_name
-                      WHERE cthd.product_id = '{$product['product_id']}'
-                      AND hd.order_status = 'Giao thành công' $where_clause
-                      ORDER BY hd.order_date DESC";
-
-        $product_orders_result = mysqli_query($conn, $product_orders_sql);
-        $product['orders'] = [];
-        $product['order_count'] = 0;
-        
-        if ($product_orders_result && mysqli_num_rows($product_orders_result) > 0) {
-            while ($order = mysqli_fetch_assoc($product_orders_result)) {
-                $product['orders'][] = $order;
-                $product['order_count']++;
-            }
-        }
-        
-        $top_products[] = $product;
-    }
-}
-
-// Truy vấn để lấy sản phẩm bán chạy nhất
-$best_seller_sql = "SELECT sp.product_id, sp.product_name, sp.product_price, sp.product_image, 
-                    SUM(cthd.quantity) as total_sold,
-                    SUM(cthd.quantity * sp.product_price) as total_revenue
-                    FROM sanpham sp
-                    JOIN chitiethoadon cthd ON sp.product_id = cthd.product_id
-                    JOIN hoadon hd ON cthd.order_id = hd.order_id
-                    WHERE 1=1 AND hd.order_status = 'Giao thành công' $where_clause
-                    GROUP BY sp.product_id, sp.product_name, sp.product_price, sp.product_image
-                    ORDER BY total_sold DESC
-                    LIMIT 1";
-
-$best_seller_result = mysqli_query($conn, $best_seller_sql);
-$best_seller = null;
-
-// Truy vấn để lấy sản phẩm bán ế nhất
-$worst_seller_sql = "SELECT sp.product_id, sp.product_name, sp.product_price, sp.product_image, 
-                    COALESCE(SUM(cthd.quantity), 0) as total_sold,
-                    COALESCE(SUM(cthd.quantity * sp.product_price), 0) as total_revenue
-                    FROM sanpham sp
-                    LEFT JOIN chitiethoadon cthd ON sp.product_id = cthd.product_id
-                    LEFT JOIN hoadon hd ON cthd.order_id = hd.order_id AND (1=1 AND hd.order_status = 'Giao thành công' $where_clause)
-                    GROUP BY sp.product_id, sp.product_name, sp.product_price, sp.product_image
-                    HAVING total_sold > 0
-                    ORDER BY total_sold ASC
-                    LIMIT 1";
-
-$worst_seller_result = mysqli_query($conn, $worst_seller_sql);
-$worst_seller = null;
-
-// Xử lý sản phẩm bán chạy nhất
-if ($best_seller_result && mysqli_num_rows($best_seller_result) > 0) {
-    $best_seller = mysqli_fetch_assoc($best_seller_result);
-    
-    // Truy vấn đơn hàng liên quan đến sản phẩm bán chạy
-    $product_orders_sql = "SELECT DISTINCT hd.order_id, hd.order_date, nd.fullname
-                      FROM hoadon hd
-                      JOIN chitiethoadon cthd ON hd.order_id = cthd.order_id
-                      LEFT JOIN nguoidung nd ON hd.name = nd.user_name
-                      WHERE cthd.product_id = '{$best_seller['product_id']}'
-                      AND hd.order_status = 'Giao thành công' $where_clause
-                      ORDER BY hd.order_date DESC";
-
-    $product_orders_result = mysqli_query($conn, $product_orders_sql);
-    $best_seller['orders'] = [];
-    $best_seller['order_count'] = 0;
-    
-    if ($product_orders_result && mysqli_num_rows($product_orders_result) > 0) {
-        while ($order = mysqli_fetch_assoc($product_orders_result)) {
-            $best_seller['orders'][] = $order;
-            $best_seller['order_count']++;
-        }
-    }
-}
-
-// Xử lý sản phẩm bán ế nhất
-if ($worst_seller_result && mysqli_num_rows($worst_seller_result) > 0) {
-    $worst_seller = mysqli_fetch_assoc($worst_seller_result);
-    
-    // Truy vấn đơn hàng liên quan đến sản phẩm bán ế
-    $product_orders_sql = "SELECT DISTINCT hd.order_id, hd.order_date, nd.fullname
-                      FROM hoadon hd
-                      JOIN chitiethoadon cthd ON hd.order_id = cthd.order_id
-                      LEFT JOIN nguoidung nd ON hd.name = nd.user_name
-                      WHERE cthd.product_id = '{$worst_seller['product_id']}'
-                      AND hd.order_status = 'Giao thành công' $where_clause
-                      ORDER BY hd.order_date DESC";
-
-    $product_orders_result = mysqli_query($conn, $product_orders_sql);
-    $worst_seller['orders'] = [];
-    $worst_seller['order_count'] = 0;
-    
-    if ($product_orders_result && mysqli_num_rows($product_orders_result) > 0) {
-        while ($order = mysqli_fetch_assoc($product_orders_result)) {
-            $worst_seller['orders'][] = $order;
-            $worst_seller['order_count']++;
-        }
-    }
-}
+// Lấy dữ liệu thống kê
+$top_customers = $statistics->getTopCustomers();
+$top_products = $statistics->getTopProducts();
+$best_seller = $statistics->getBestSeller();
+$worst_seller = $statistics->getWorstSeller();
 
 ?>
 <!DOCTYPE html>
@@ -477,40 +300,38 @@ if ($worst_seller_result && mysqli_num_rows($worst_seller_result) > 0) {
                 <tbody>
                 <?php
                     $rank = 1;
-                    
                     if (!empty($top_customers)) {
                         foreach ($top_customers as $customer) {
-                            // Hiển thị thông tin đơn hàng
-                            $order_display = count($customer['orders']) > 1 ? 
-                                            count($customer['orders']) . " đơn hàng" : 
-                                            "1 đơn hàng";
+                            $orderCount = count($customer['orders']);
+                            $orderDisplay = $orderCount > 1 ? "{$orderCount} đơn hàng" : "1 đơn hàng";
                             
-                            // Tạo button xem chi tiết
-                            if (count($customer['orders']) == 1) {
-                                // Nếu chỉ có 1 đơn hàng thì tạo button đơn giản
+                            if ($orderCount == 1) {
                                 $order = reset($customer['orders']);
-                                $button = '<a href="satictics_detail.php?id=' . $order['order_id'] . '" class="btn btn-info btn-sm" style="background-color: #17ab1d; color: white; border: none; padding: 6px 12px; border-radius: 4px; text-decoration: none;">
-                                            <i class="fa fa-eye"></i> Xem đơn hàng
-                                           </a>';
+                                $button = sprintf(
+                                    '<a href="satictics_detail.php?id=%s" class="btn btn-info btn-sm" style="background-color: #17ab1d; color: white; border: none; padding: 6px 12px; border-radius: 4px; text-decoration: none;">
+                                        <i class="fa fa-eye"></i> Xem đơn hàng
+                                    </a>',
+                                    $order['order_id']
+                                );
                             } else {
-                                // Nếu có nhiều đơn hàng thì tạo dropdown
                                 $button = '<div class="dropdown">
-                                            <button class="btn btn-info1 dropdown-toggle" type="button" id="dropdownContentButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <i></i>▼ Xem đơn hàng
-                                            </button>
-                                            <div class="dropdown-content">';
+                                    <button class="btn btn-info1 dropdown-toggle" type="button" data-toggle="dropdown">
+                                        <i></i>▼ Xem đơn hàng
+                                    </button>
+                                    <div class="dropdown-content">';
 
-                                            usort($customer['orders'], function($a, $b) {
-                                                return strtotime($a['order_date']) - strtotime($b['order_date']);
-                                            });
-                                
-                                // Thêm link cho từng đơn hàng
+                                usort($customer['orders'], function($a, $b) {
+                                    return strtotime($a['order_date']) - strtotime($b['order_date']);
+                                });
+
                                 foreach ($customer['orders'] as $index => $order) {
-                                    $order_date = date('d/m/Y', strtotime($order['order_date']));
-                                    $order_time = date('H:i', strtotime($order['order_date']));
-                                    $button .= '<a href="satictics_detail.php?id=' . $order['order_id'] . '">
-                                                Đơn ' . ($index + 1) . ': '  . '  ' . $order_date . '
-                                               </a>';
+                                    $orderDate = date('d/m/Y', strtotime($order['order_date']));
+                                    $button .= sprintf(
+                                        '<a href="satictics_detail.php?id=%s">Đơn %d: %s</a>',
+                                        $order['order_id'],
+                                        $index + 1,
+                                        $orderDate
+                                    );
                                 }
                                 
                                 $button .= '</div></div>';
@@ -518,8 +339,8 @@ if ($worst_seller_result && mysqli_num_rows($worst_seller_result) > 0) {
                     ?>
                     <tr>
                         <td><?php echo $rank++; ?></td>
-                        <td><?php echo $customer['fullname']; ?></td>
-                        <td><?php echo $order_display; ?></td>
+                        <td><?php echo htmlspecialchars($customer['fullname']); ?></td>
+                        <td><?php echo $orderDisplay; ?></td>
                         <td><?php echo number_format($customer['total_amount'], 0, ',', '.') . 'đ'; ?></td>
                         <td><?php echo $button; ?></td>
                     </tr>
@@ -536,6 +357,8 @@ if ($worst_seller_result && mysqli_num_rows($worst_seller_result) > 0) {
                 </tbody>
             </table>
         </div>
+
+        
 
 </div>
     </main>

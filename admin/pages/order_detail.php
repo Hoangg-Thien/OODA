@@ -1,46 +1,21 @@
 <?php
-require '../config/connect.php';
+require '../classes/Database.php';
+require '../classes/OrderDetail.php';
+
 session_name('ADMINSESSID');
 session_start();
+
 if (!isset($_GET['id']) || empty($_GET['id'])) {
     header('Location: order.php');
     exit;
 }
 
-$order_id = mysqli_real_escape_string($conn, $_GET['id']);
-
-// Lấy thông tin chi tiết đơn hàng
-$order_sql = "SELECT hd.*, nd.fullname, nd.phone, nd.district, nd.province, nd.user_address
-              FROM hoadon hd 
-              LEFT JOIN nguoidung nd ON hd.name = nd.user_name
-              WHERE hd.order_id = '$order_id'";
-
-$order_result = mysqli_query($conn, $order_sql);
-$order = mysqli_fetch_assoc($order_result);
-
-if (!$order) {
-    header('Location: order.php');
-    exit;
-}
-
-// Lấy chi tiết các sản phẩm trong đơn hàng
-$items_sql = "SELECT cthd.*, sp.product_name, sp.product_price
-              FROM chitiethoadon cthd
-              LEFT JOIN sanpham sp ON cthd.product_id = sp.product_id
-              WHERE cthd.order_id = '$order_id'";
-$items_result = mysqli_query($conn, $items_sql);
-
-// Tính tổng tiền
-$total_amount_sql = "SELECT SUM(cthd.quantity * sp.product_price) as total_amount
-                     FROM chitiethoadon cthd 
-                     JOIN sanpham sp ON cthd.product_id = sp.product_id 
-                     WHERE cthd.order_id = '$order_id'";
-$total_result = mysqli_query($conn, $total_amount_sql);
-$total_row = mysqli_fetch_assoc($total_result);
-$total_amount = $total_row['total_amount'];
-
-$order_date = date('d/m/Y', strtotime($order['order_date']));
-$order_time = date('H:i', strtotime($order['order_date']));
+$orderDetail = new OrderDetail($_GET['id']);
+$order = $orderDetail->getOrderInfo();
+$items_result = $orderDetail->getOrderItems();
+$total_amount = $orderDetail->getTotalAmount();
+$order_date = $orderDetail->getFormattedDate();
+$order_time = $orderDetail->getFormattedTime();
 
 ?>
 
@@ -49,7 +24,7 @@ $order_time = date('H:i', strtotime($order['order_date']));
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chi tiết hóa đơn #<?php echo $order_id; ?></title>
+    <title>Chi tiết hóa đơn #<?php echo $orderDetail->getOrderId(); ?></title>
     <link rel="stylesheet" href="./stylescss/satistics.css">
     <link rel="stylesheet" href="./stylescss/responsivestatistics.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -343,7 +318,7 @@ $order_time = date('H:i', strtotime($order['order_date']));
                 </div>
                 <div class="invoice-info">
                     <h1 class="invoice-title">HÓA ĐƠN</h1>
-                    <p class="invoice-subtitle">Mã đơn hàng: #<?php echo $order_id; ?></p>
+                    <p class="invoice-subtitle">Mã đơn hàng: #<?php echo $orderDetail->getOrderId(); ?></p>
                 </div>
             </div>
 
@@ -363,28 +338,7 @@ $order_time = date('H:i', strtotime($order['order_date']));
                         <i class="fas fa-calendar-alt" style="width: 20px; color: #47b475;"></i> <strong>Ngày đặt:</strong> <?php echo $order_date; ?><br>
                         <i class="fas fa-clock" style="width: 20px; color: #47b475;"></i> <strong>Giờ đặt:</strong> <?php echo $order_time; ?><br>
                         <i class="fas fa-info-circle" style="width: 20px; color: #47b475;"></i> <strong>Trạng thái:</strong> 
-                        <?php 
-                            $status = $order['order_status'];
-                            $status_class = '';
-                            
-                            switch($status) {
-                                case 'Đã xác nhận':
-                                    $status_class = 'confirmed';
-                                    break;
-                                case 'Chưa xác nhận':
-                                    $status_class = 'pending';
-                                    break;
-                                case 'Giao thành công':
-                                    $status_class = 'completed';
-                                    break;
-                                case 'Đã hủy':
-                                    $status_class = 'cancelled';
-                                    break;
-                                default:
-                                    $status_class = '';
-                            }
-                        ?>
-                        <span class="<?php echo $status_class; ?>"><?php echo $status; ?></span>
+                        <span class="<?php echo $orderDetail->getStatusClass(); ?>"><?php echo $order['order_status']; ?></span>
                     </p>
                 </div>
             </div>
@@ -476,12 +430,7 @@ $order_time = date('H:i', strtotime($order['order_date']));
                 <div class="total-row grand-total">
                     <div class="total-label"><i class="fas fa-money-bill-wave" style="margin-right: 8px;"></i>TỔNG THANH TOÁN:</div>
                     <div class="total-value">
-                        <?php 
-                        $shipping_fee = 30000;
-                        $discount = ($total_amount > 0) ? 30000 : 0;
-                        $final_total = $total_amount + $shipping_fee - $discount;
-                        echo number_format($final_total, 0, ',', '.'); 
-                        ?>đ
+                        <?php echo number_format($orderDetail->getFinalTotal(), 0, ',', '.'); ?>đ
                     </div>
                 </div>
             </div>

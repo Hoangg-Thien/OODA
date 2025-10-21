@@ -16,51 +16,89 @@ if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'Nhân viên') 
     exit();
 }
 
-require '../config/connect.php';
+require '../classes/Database.php';
+$db = new Database();
+$conn = $db->getConnection();
+class UserManager {
+    private $db;
+    private $limit = 4;
 
-// Lấy trang hiện tại từ URL, mặc định là 1
+    public function __construct($db) {
+        $this->db = $db;
+    }
+
+    // 🧭 Lấy tên địa phương (province / district)
+    private function getLocationName($table, $id) {
+        $id = $this->db->escape($id);
+        $sql = "SELECT name FROM $table WHERE {$table}_id = '$id'";
+        $result = $this->db->query($sql);
+        if ($result && $result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            return trim($row['name']);
+        }
+        return '';
+    }
+
+    // 🔍 Xây dựng điều kiện WHERE khi lọc
+    private function buildWhereClause($provinceId, $districtId) {
+        $where = "";
+
+        if (!empty($provinceId)) {
+            $provinceName = $this->getLocationName('province', $provinceId);
+            if (!empty($provinceName)) {
+                $provinceName = $this->db->escape($provinceName);
+                $where .= " AND (nd.province LIKE '%$provinceName%' OR nd.address LIKE '%$provinceName%')";
+            }
+        }
+
+        if (!empty($districtId)) {
+            $districtName = $this->getLocationName('district', $districtId);
+            if (!empty($districtName)) {
+                $districtName = $this->db->escape($districtName);
+                $where .= " AND (nd.district LIKE '%$districtName%' OR nd.address LIKE '%$districtName%')";
+            }
+        }
+
+        return $where;
+    }
+
+    // 📋 Lấy danh sách người dùng có phân trang & lọc
+    public function getUsers($page = 1, $provinceId = null, $districtId = null) {
+        $offset = ($page - 1) * $this->limit;
+        $where = "WHERE 1=1 " . $this->buildWhereClause($provinceId, $districtId);
+
+        $sql = "SELECT user_name, fullname, user_address, user_email, phone, user_role, user_status, district, province 
+                FROM nguoidung nd 
+                $where 
+                LIMIT {$this->limit} OFFSET $offset";
+        return $this->db->query($sql);
+    }
+
+    // 📊 Tính tổng số trang
+    public function getTotalPages() {
+        $sql = "SELECT COUNT(*) as total FROM nguoidung";
+        $result = $this->db->query($sql);
+        $row = $result->fetch_assoc();
+        return ceil($row['total'] / $this->limit);
+    }
+
+    // 🗺️ Lấy danh sách tỉnh/thành phố
+    public function getProvinces() {
+        $sql = "SELECT province_id, name FROM province ORDER BY name";
+        return $this->db->query($sql);
+    }
+}
+$userManager = new UserManager($db);
+// Lấy tham số từ URL
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-$limit = 4; 
-$offset = ($page - 1) * $limit;
+$provinceId = $_GET['province'] ?? null;
+$districtId = $_GET['district'] ?? null;
 
-$sql = "SELECT user_name, fullname, user_address, user_email, phone, user_role, user_status, district, province FROM nguoidung nd LIMIT $limit OFFSET $offset";
-$result = $conn->query($sql);
-
-// Lấy tổng số người dùng để tính số trang
-$totalSql = "SELECT COUNT(*) as total FROM nguoidung";
-$totalResult = $conn->query($totalSql);
-$totalRow = $totalResult->fetch_assoc();
-$totalUsers = $totalRow['total'];
-$totalPages = ceil($totalUsers / $limit);
-
-$where_clause = "";
-if (isset($_GET['province']) && !empty($_GET['province'])) {
-    $province_id = $_GET['province'];
-    // Lấy tên tỉnh/thành từ ID
-    $province_sql = "SELECT name FROM province WHERE province_id = '$province_id'";
-    $province_result = mysqli_query($conn, $province_sql);
-    if ($province_result && mysqli_num_rows($province_result) > 0) {
-        $province_data = mysqli_fetch_assoc($province_result);
-        $province_name = mysqli_real_escape_string($conn, trim($province_data['name']));
-        $where_clause .= " AND (nd.province LIKE '%$province_name%' OR nd.address LIKE '%$province_name%')";
-    }
-}
-
-if (isset($_GET['district']) && !empty($_GET['district'])){
-    $district_id = $_GET['district'];
-    // Lấy tên quận/huyện từ ID
-    $district_sql = "SELECT name FROM district WHERE district_id = '$district_id'";
-    $district_result = mysqli_query($conn, $district_sql);
-    if ($district_result && mysqli_num_rows($district_result) > 0) {
-        $district_data = mysqli_fetch_assoc($district_result);
-        $district_name = mysqli_real_escape_string($conn, trim($district_data['name']));
-        $where_clause .= " AND (nd.district LIKE '%$district_name%' OR nd.address LIKE '%$district_name%')";
-    }
-}
-
-// Lấy danh sách tỉnh/thành phố cho form thêm người dùng
-$province_sql = "SELECT province_id, name FROM province ORDER BY name";
-$province_result = $conn->query($province_sql);
+// Lấy dữ liệu
+$users = $userManager->getUsers($page, $provinceId, $districtId);
+$totalPages = $userManager->getTotalPages();
+$provinces = $userManager->getProvinces();
+?>
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -160,33 +198,28 @@ $province_result = $conn->query($province_sql);
                     </tr>
                 </thead>
                 <tbody>
-                    <?php
-                    if ($result->num_rows > 0) {
-                        while($row = $result->fetch_assoc()) {
-                    ?>
-                    <tr>
-                        <td><?php echo $row["user_name"]; ?></td>
-                        <td><?php echo $row["fullname"]; ?></td>
-                        <td><?php echo $row["user_address"] . ", " . $row["district"] . ", " . $row["province"]; ?></td>
-                        <td><?php echo $row["user_email"]; ?> </td>
-                        <td><?php echo $row["phone"]; ?></td>
-                        <td><?php echo $row["user_role"]; ?></td>
-                        <td><?php echo $row["user_status"]; ?></td>
-                        <td>
-                            <button style="outline: none;" class="btn delete" onclick=""><i
-                                class="fa-solid fa-lock-open"></i></button>
-                            <button style="outline: none;" class="btn gear" onclick=""><i class="fa fa-edit"></i></button>
-                            <button style="outline: none;" class="btn lock" onclick=""><i
-                                class="fa-solid fa-lock"></i></button>
-                        </td>
-                    </tr>
-                    <?php
-                        }
-                    } else {
-                        echo "<tr><td colspan='10' style='text-align:center'>Không có dữ liệu người dùng</td></tr>";
-                    }
-                    $conn->close();
-                    ?>
+                     
+        <?php if ($users && $users->num_rows > 0): ?>
+            <?php while ($row = $users->fetch_assoc()): ?>
+                <tr>
+                    <td><?= htmlspecialchars($row["user_name"]) ?></td>
+                    <td><?= htmlspecialchars($row["fullname"]) ?></td>
+                    <td><?= htmlspecialchars($row["user_address"] . ", " . $row["district"] . ", " . $row["province"]) ?></td>
+                    <td><?= htmlspecialchars($row["user_email"]) ?></td>
+                    <td><?= htmlspecialchars($row["phone"]) ?></td>
+                    <td><?= htmlspecialchars($row["user_role"]) ?></td>
+                    <td><?= htmlspecialchars($row["user_status"]) ?></td>
+                    <td>
+                        <button class="btn delete"><i class="fa-solid fa-lock-open"></i></button>
+                        <button class="btn gear"><i class="fa fa-edit"></i></button>
+                        <button class="btn lock"><i class="fa-solid fa-lock"></i></button>
+                    </td>
+                </tr>
+            <?php endwhile; ?>
+        <?php else: ?>
+            <tr><td colspan="8" style="text-align:center">Không có dữ liệu người dùng</td></tr>
+        <?php endif; ?>
+
                 </tbody>
                 </table>
             </div>
@@ -352,14 +385,17 @@ $province_result = $conn->query($province_sql);
                             <select id="province" name="province" class="form-control">
                             <option value="">Chọn một tỉnh/thành phố</option>
                             <?php
-                                if ($province_result && $province_result->num_rows > 0) {
-                                    while ($row = $province_result->fetch_assoc()) {
-                                    ?>
-                                        <option value="<?php echo $row['province_id']; ?>"><?php echo $row['name']; ?></option>
-                                    <?php
-                                    }
-                                }
-                                ?>
+if ($provinces && $provinces->num_rows > 0) {
+    while ($row = $provinces->fetch_assoc()) {
+?>
+        <option value="<?php echo $row['province_id']; ?>">
+            <?php echo htmlspecialchars($row['name']); ?>
+        </option>
+<?php
+    }
+}
+?>
+
                             </select>
                         </div>
                         <div class="form-group col-xs-12 col-md-6">

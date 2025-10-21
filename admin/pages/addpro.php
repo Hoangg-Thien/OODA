@@ -16,7 +16,9 @@ if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'Nhân viên') 
     exit();
 }
 
-require_once '../config/connect.php';
+require '../classes/Database.php';
+$db = new Database();
+$conn = $db->getConnection();
 
 // Lấy danh sách danh mục và nhà cung cấp
 $categories = [];
