@@ -3,7 +3,7 @@ class Database {
     private $host = 'localhost';
     private $user = 'root';
     private $pass = '';
-    private $dbname = 'ooda'; // ⚙️ tên database của bạn
+    private $dbname = 'c07db'; // ⚙️ tên database của bạn
 
     private $conn;
 
