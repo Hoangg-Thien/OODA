@@ -1,0 +1,265 @@
+/* ------------------------------
+   GLOBAL RESET & BASE STYLE
+------------------------------ */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins", "Segoe UI", sans-serif;
+}
+
+body {
+  background: linear-gradient(to right, #f7f9fc, #eaf3ee);
+  color: #333;
+  line-height: 1.6;
+}
+
+/* ------------------------------
+   CONTAINER
+------------------------------ */
+.container {
+  max-width: 900px;
+  margin: 50px auto;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 40px 50px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  transition: 0.3s;
+}
+
+.container:hover {
+  transform: translateY(-3px);
+}
+
+.container h1 {
+  text-align: center;
+  color: #2e7d32;
+  font-size: 2.2rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 35px;
+  position: relative;
+}
+
+.container h1::after {
+  content: "";
+  display: block;
+  width: 80px;
+  height: 4px;
+  background: #28a745;
+  margin: 10px auto 0;
+  border-radius: 2px;
+}
+
+/* ------------------------------
+   SECTIONS
+------------------------------ */
+.section {
+  margin-bottom: 35px;
+  background: #fdfdfd;
+  padding: 25px 30px;
+  border-radius: 10px;
+  border: 1px solid #ebebeb;
+}
+
+.section h3 {
+  color: #28a745;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.section h3::before {
+  content: "🛒";
+  margin-right: 10px;
+}
+
+/* ------------------------------
+   INPUTS & FORMS
+------------------------------ */
+.input-group {
+  margin-bottom: 18px;
+}
+
+.input-group label {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 6px;
+  color: #444;
+}
+
+.input-group input,
+.input-group textarea,
+.input-group select {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+  transition: all 0.25s ease;
+  background-color: #fafafa;
+}
+
+.input-group input:focus,
+textarea:focus,
+select:focus {
+  border-color: #28a745;
+  background-color: #fff;
+  box-shadow: 0 0 6px rgba(40, 167, 69, 0.2);
+}
+
+/* ------------------------------
+   CHECKBOX
+------------------------------ */
+.checkbox-group {
+  margin-bottom: 18px;
+  background: #f8f9f9;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.checkbox-group label {
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.checkbox-group input {
+  margin-right: 8px;
+  transform: scale(1.2);
+  accent-color: #28a745;
+}
+
+/* ------------------------------
+   PAYMENT OPTIONS
+------------------------------ */
+.payment-option {
+  display: block;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.payment-option:hover {
+  color: #2e7d32;
+  transform: translateX(2px);
+}
+
+.payment-option input {
+  margin-right: 8px;
+  accent-color: #28a745;
+}
+
+/* ------------------------------
+   BANK TRANSFER INFO
+------------------------------ */
+.bank-transfer-info {
+  border: 1px solid #cde8d5;
+  background-color: #f7fcf8;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+
+.bank-transfer-info .qr-code img {
+  width: 160px;
+  height: 160px;
+  border-radius: 10px;
+  border: 3px solid #28a745;
+  background: #fff;
+  padding: 5px;
+}
+
+.bank-transfer-info .bank-info {
+  flex: 1;
+  font-size: 15px;
+}
+
+.bank-transfer-info h4 {
+  color: #28a745;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.bank-transfer-info table {
+  width: 100%;
+  font-size: 14.5px;
+}
+
+.bank-transfer-info td {
+  padding: 5px 8px;
+}
+
+.bank-transfer-info button {
+  background: none;
+  border: none;
+  color: #28a745;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.bank-transfer-info button:hover {
+  text-decoration: underline;
+}
+
+/* ------------------------------
+   COD INFO
+------------------------------ */
+.cod-info {
+  border: 1px dashed #ffb300;
+  background-color: #fff9e6;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 10px;
+  color: #444;
+}
+
+/* ------------------------------
+   SUBMIT BUTTON
+------------------------------ */
+.submit-btn {
+  display: block;
+  width: 100%;
+  background: linear-gradient(135deg, #28a745, #34ce57);
+  color: white;
+  padding: 15px 0;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 30px;
+}
+
+.submit-btn:hover {
+  background: linear-gradient(135deg, #23913b, #2fab4a);
+  transform: translateY(-2px);
+}
+
+/* ------------------------------
+   RESPONSIVE DESIGN
+------------------------------ */
+@media (max-width: 768px) {
+  .container {
+    padding: 25px 20px;
+  }
+
+  .bank-transfer-info {
+    text-align: center;
+  }
+
+  .bank-transfer-info .qr-code img {
+    margin-bottom: 10px;
+  }
+
+  .section {
+    padding: 20px;
+  }
+
+  .submit-btn {
+    font-size: 1rem;
+  }
+}
