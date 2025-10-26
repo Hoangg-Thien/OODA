@@ -1,0 +1,86 @@
+body {
+  background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
+  font-family: "Poppins", sans-serif;
+  color: #333;
+}
+
+.history-container {
+  max-width: 1000px;
+  background: #fff;
+  margin: 60px auto;
+  padding: 40px 50px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {opacity: 0; transform: translateY(20px);}
+  to {opacity: 1; transform: translateY(0);}
+}
+
+.history-container h1 {
+  text-align: center;
+  color: #2e7d32;
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 30px;
+}
+
+.order-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+
+.order-table th, .order-table td {
+  padding: 12px 14px;
+  border: 1px solid #e0e0e0;
+  text-align: center;
+}
+
+.order-table th {
+  background-color: #4CAF50;
+  color: white;
+  font-weight: 600;
+}
+
+.order-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.order-table tr:hover {
+  background-color: #f1f8e9;
+}
+
+.btn-detail {
+  background: #43a047;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.btn-detail:hover {
+  background: #2e7d32;
+}
+
+/* Trạng thái */
+.status {
+  padding: 6px 10px;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: 600;
+}
+
+.status.chưa-xác-nhận { background-color: #ff9800; }
+.status.đã-xác-nhận { background-color: #4caf50; }
+.status.đã-hủy { background-color: #f44336; }
+
+.no-order {
+  text-align: center;
+  color: #777;
+  font-size: 16px;
+  margin-top: 30px;
+}

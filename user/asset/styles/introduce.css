@@ -1,0 +1,132 @@
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f5f9f6;
+  margin: 0;
+  padding: 0;
+}
+/* ===== GIỚI THIỆU PAGE (nâng cấp chữ to rõ hơn) ===== */
+.update-system-container {
+  max-width: 1100px;
+  margin: 80px auto;
+  background: linear-gradient(to bottom, #ffffff, #fcfcfc);
+  border-radius: 25px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  padding: 80px 90px;
+  text-align: center;
+  animation: fadeIn 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  border: 1px solid rgba(0, 100, 0, 0.1);
+}
+
+.update-system-container h1 {
+  color: #006400;
+  font-size: 48px;
+  font-weight: 700;
+  margin-bottom: 40px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  position: relative;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.15);
+}
+
+.update-system-container h1::after {
+  content: "";
+  width: 120px;
+  height: 5px;
+  background: linear-gradient(to right, #4CAF50, #006400);
+  display: block;
+  margin: 20px auto 0;
+  border-radius: 5px;
+}
+
+.update-system-container p {
+  color: #2c2c2c;
+  line-height: 1.9;
+  font-size: 19px;
+  margin-bottom: 60px;
+  text-align: justify;
+  text-align-last: center;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  opacity: 0.9;
+  transition: all 0.3s ease;
+}
+
+.update-system-container p:hover {
+  transform: translateY(-2px);
+  opacity: 1;
+}
+
+.update-system-container img {
+  display: block;
+  margin: 0 auto;
+  width: 240px;
+  height: auto;
+  filter: drop-shadow(0px 8px 15px rgba(0, 0, 0, 0.2));
+  transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+  border-radius: 15px;
+}
+
+.update-system-container img:hover {
+  transform: scale(1.1) translateY(-5px);
+  filter: drop-shadow(0px 15px 25px rgba(0, 100, 0, 0.25));
+}
+
+/* Hiệu ứng fade in */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .update-system-container {
+    padding: 50px 35px;
+    margin: 40px 20px;
+  }
+
+  .update-system-container h1 {
+    font-size: 36px;
+    letter-spacing: 2px;
+  }
+
+  .update-system-container p {
+    font-size: 17px;
+    margin-bottom: 40px;
+  }
+
+  .update-system-container img {
+    width: 200px;
+  }
+}
+
+@media (max-width: 480px) {
+  .update-system-container {
+    padding: 35px 25px;
+    margin: 20px 15px;
+    border-radius: 20px;
+  }
+
+  .update-system-container h1 {
+    font-size: 28px;
+    letter-spacing: 1.5px;
+  }
+
+  .update-system-container h1::after {
+    width: 80px;
+    margin: 15px auto 0;
+  }
+
+  .update-system-container p {
+    font-size: 16px;
+    line-height: 1.8;
+    letter-spacing: 0.3px;
+  }
+}

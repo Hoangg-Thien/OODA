@@ -1,0 +1,279 @@
+/* ===== CONTACT PAGE (bản nâng cấp theo index.css) ===== */
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f5f9f6;
+  margin: 0;
+  padding: 0;
+}
+
+/* Container chính */
+.contact-container {
+  max-width: 900px;
+  margin: 80px auto;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.1);
+  padding: 60px 70px;
+  animation: fadeIn 0.6s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(25px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Tiêu đề chính */
+.contact-container h2 {
+  text-align: center;
+  color: #006400;
+  font-size: 42px;
+  margin-bottom: 35px;
+  font-weight: 700;
+  position: relative;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+}
+
+.contact-container h2::after {
+  content: "";
+  width: 80px;
+  height: 5px;
+  background: linear-gradient(to right, #4CAF50, #006400);
+  display: block;
+  margin: 15px auto 0;
+  border-radius: 5px;
+}
+
+/* Thông tin liên hệ */
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+  background: linear-gradient(135deg, #f8fff8, #f0f9f0);
+  border: 2px solid #e0f2e0;
+  border-radius: 15px;
+  padding: 30px 35px;
+  margin-bottom: 45px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  position: relative;
+}
+
+.contact-info p {
+  margin: 0;
+  font-size: 18px;
+  color: #2c2c2c;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  transition: transform 0.3s ease;
+}
+
+.contact-info p:hover {
+  transform: translateX(5px);
+}
+
+.contact-info strong {
+  color: #006400;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.contact-info i {
+  color: #006400;
+  font-size: 22px;
+  transition: transform 0.3s ease;
+}
+
+/* Tiêu đề phụ */
+.contact-container h3 {
+  color: #333;
+  text-align: center;
+  font-size: 22px;
+  margin-bottom: 20px;
+}
+
+/* Form liên hệ */
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  background: #ffffff;
+  padding: 40px 45px;
+  border: 2px solid #e8f5e8;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+}
+
+.contact-form input,
+.contact-form textarea {
+  padding: 15px 20px;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  width: 100%;
+  background: #fafafa;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  border-color: #006400;
+  outline: none;
+  box-shadow: 0 0 12px rgba(0, 100, 0, 0.15);
+  background: #ffffff;
+  transform: translateY(-2px);
+}
+
+/* Nút gửi */
+.contact-form button {
+  background: linear-gradient(135deg, #006400, #008000);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 16px 0;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 15px rgba(0, 100, 0, 0.2);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.contact-form button:hover {
+  background: linear-gradient(135deg, #005000, #006400);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 100, 0, 0.3);
+}
+
+/* Hiệu ứng khi nhấn */
+.contact-form button:active {
+  transform: scale(0.98);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .contact-container {
+    padding: 30px 25px;
+  }
+  .contact-info {
+    padding: 20px;
+  }
+  .contact-form {
+    padding: 25px;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-container {
+    margin: 40px 15px;
+  }
+  .contact-container h2 {
+    font-size: 26px;
+  }
+  .contact-form input,
+  .contact-form textarea {
+    font-size: 15px;
+  }
+}
+/* ===== GIỚI THIỆU PAGE ===== */
+.update-system-container {
+  max-width: 1000px;
+  margin: 80px auto;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08);
+  padding: 60px 70px;
+  text-align: center;
+  animation: fadeIn 0.6s ease;
+}
+
+.update-system-container h1 {
+  color: #4CAF50;
+  font-size: 34px;
+  font-weight: 800;
+  margin-bottom: 25px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+}
+
+.update-system-container h1::after {
+  content: "";
+  width: 70px;
+  height: 4px;
+  background: #4CAF50;
+  display: block;
+  margin: 12px auto 0;
+  border-radius: 3px;
+}
+
+.update-system-container p {
+  color: #444;
+  line-height: 1.8;
+  font-size: 17px;
+  margin-bottom: 40px;
+  text-align: justify;
+  text-align-last: center;
+}
+
+.update-system-container img {
+  display: block;
+  margin: 0 auto;
+  width: 200px;
+  height: auto;
+  filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.15));
+  transition: transform 0.3s ease;
+}
+
+.update-system-container img:hover {
+  transform: scale(1.05);
+}
+
+/* Hiệu ứng fade in dùng chung */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .update-system-container {
+    padding: 40px 30px;
+    margin: 40px 20px;
+  }
+
+  .update-system-container h1 {
+    font-size: 28px;
+  }
+
+  .update-system-container p {
+    font-size: 16px;
+  }
+
+  .update-system-container img {
+    width: 160px;
+  }
+}
+
+@media (max-width: 480px) {
+  .update-system-container {
+    padding: 25px 20px;
+    margin: 20px 10px;
+  }
+
+  .update-system-container h1 {
+    font-size: 24px;
+  }
+}

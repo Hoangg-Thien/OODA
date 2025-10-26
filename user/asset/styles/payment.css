@@ -1,0 +1,271 @@
+/* 🌿 RESET & BASE ------------------------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", "Segoe UI", sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+  color: #333;
+}
+
+/* 🌿 CONTAINER ------------------------- */
+.container {
+  max-width: 850px;
+  margin: 60px auto;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 40px 45px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.container h1 {
+  text-align: center;
+  color: #2e7d32;
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 35px;
+  position: relative;
+}
+
+.container h1::after {
+  content: "";
+  display: block;
+  width: 90px;
+  height: 4px;
+  background: #43a047;
+  border-radius: 2px;
+  margin: 10px auto 0;
+}
+
+/* 🌿 SECTION ------------------------- */
+.section {
+  background: #fdfdfd;
+  border: 1px solid #e6e6e6;
+  border-radius: 12px;
+  padding: 25px 30px;
+  margin-bottom: 30px;
+  transition: all 0.3s ease;
+}
+
+.section:hover {
+  box-shadow: 0 4px 12px rgba(67, 160, 71, 0.1);
+  transform: translateY(-2px);
+}
+
+.section h3 {
+  color: #2e7d32;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.section h3::before {
+  content: "💳";
+  margin-right: 10px;
+}
+
+/* 🌿 FORM ELEMENTS ------------------------- */
+.input-group {
+  margin-bottom: 18px;
+}
+
+.input-group label {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 6px;
+  color: #444;
+}
+
+.input-group input,
+.input-group textarea,
+.input-group select {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  background-color: #fafafa;
+  font-size: 15px;
+  transition: all 0.25s ease;
+}
+
+.input-group input:focus,
+.input-group textarea:focus,
+.input-group select:focus {
+  border-color: #43a047;
+  background: #fff;
+  box-shadow: 0 0 5px rgba(67, 160, 71, 0.2);
+}
+
+/* 🌿 PAYMENT OPTIONS ------------------------- */
+.payment-option {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.payment-option:hover {
+  transform: translateX(2px);
+  color: #2e7d32;
+}
+
+.payment-option input {
+  margin-right: 10px;
+  accent-color: #43a047;
+}
+
+/* 🌿 BANK TRANSFER ------------------------- */
+.bank-transfer-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  background-color: #f7fcf8;
+  border: 1px solid #cde8d5;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 15px;
+}
+
+.bank-transfer-info .qr-code img {
+  width: 160px;
+  height: 160px;
+  border-radius: 10px;
+  border: 3px solid #43a047;
+  background: #fff;
+  padding: 5px;
+  transition: transform 0.3s;
+}
+
+.bank-transfer-info .qr-code img:hover {
+  transform: scale(1.05);
+}
+
+.bank-transfer-info .bank-info {
+  flex: 1;
+  font-size: 15px;
+}
+
+.bank-transfer-info h4 {
+  color: #2e7d32;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.bank-transfer-info table {
+  width: 100%;
+  font-size: 14.5px;
+  border-collapse: collapse;
+}
+
+.bank-transfer-info td {
+  padding: 6px 8px;
+}
+
+.bank-transfer-info button {
+  background: none;
+  border: none;
+  color: #2e7d32;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.bank-transfer-info button:hover {
+  text-decoration: underline;
+}
+
+/* 🌿 COD INFO ------------------------- */
+.cod-info {
+  border: 1px dashed #ffb300;
+  background-color: #fff9e6;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 10px;
+  color: #444;
+}
+
+/* 🌿 SUBMIT BUTTON ------------------------- */
+.submit-btn {
+  display: block;
+  width: 100%;
+  background: linear-gradient(135deg, #43a047, #4caf50);
+  color: white;
+  padding: 15px;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.submit-btn:hover {
+  background: linear-gradient(135deg, #2e7d32, #43a047);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(67, 160, 71, 0.3);
+}
+
+/* 🌿 RESPONSIVE ------------------------- */
+@media (max-width: 768px) {
+  .container {
+    padding: 25px 20px;
+  }
+
+  .bank-transfer-info {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .bank-transfer-info .qr-code img {
+    margin-bottom: 10px;
+  }
+}
+/* 🌿 TOP NAV LINKS (TRANG CHỦ + GIỎ HÀNG) ------------------------- */
+.top-links {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.top-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 15px;
+  text-decoration: none;
+  background: #f2fdf4;
+  border: 1px solid #a5d6a7;
+  color: #2e7d32;
+  padding: 8px 14px;
+  border-radius: 8px;
+  transition: all 0.25s ease;
+}
+
+.top-links a:hover {
+  background: #43a047;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 3px 6px rgba(67, 160, 71, 0.3);
+}
+
+.top-links a i,
+.top-links a img {
+  width: 18px;
+  height: 18px;
+}
+
