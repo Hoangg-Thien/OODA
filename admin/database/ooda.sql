@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th10 16, 2025 lúc 03:26 PM
+-- Thời gian đã tạo: Th10 24, 2025 lúc 04:08 PM
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
 -- Phiên bản PHP: 8.2.12
 
@@ -799,7 +799,7 @@ CREATE TABLE `hoadon` (
 INSERT INTO `hoadon` (`order_id`, `name`, `order_status`, `order_date`, `PaymentMethod`, `phone`, `province`, `district`, `address`) VALUES
 (1, 'uyvu123', 'Giao thành công', '2025-10-10 14:32:00', 'Chuyển khoản', '1234567890', 'Hà Nội', 'Ba Đình', '12 Phan Đình Phùng'),
 (2, 'uyvu123', 'Đã hủy', '2025-10-11 09:20:00', 'Tiền mặt', '0909123457', 'Hồ Chí Minh', 'Quận 1 ', '25 Nguyễn Huệ'),
-(3, 'uyvu123', 'Chưa xác nhận', '2025-10-12 15:45:00', 'Tiền mặt', '0905123456', 'Đà Nẵng', 'Hải Châu ', '56 Lê Duẩn'),
+(3, 'uyvu123', 'Đã xác nhận', '2025-10-12 15:45:00', 'Tiền mặt', '0905123456', 'Đà Nẵng', 'Hải Châu ', '56 Lê Duẩn'),
 (4, 'uyvu123', 'Đã xác nhận', '2025-10-13 10:10:00', 'Chuyển khoản', '0932123123', 'Cần Thơ', 'Ninh Kiều', '89 Trần Hưng Đạo'),
 (5, 'uyvu123', 'Giao thành công', '2025-10-14 18:00:00', 'Tiền mặt', '0945234567', 'Huế', 'Phú Hội', '11 Nguyễn Huệ');
 
@@ -982,37 +982,37 @@ INSERT INTO `sanpham` (`product_id`, `category_id`, `supplier_id`, `product_name
 ('F002', 1, 1, 'Kiwi', 'trai-kiwi.jpg', 'Hiển thị', 160000.00, '', '', '', 0),
 ('F003', 1, 1, 'Lựu Ai Cập', 'trai-luu.jpg', 'Hiển thị', 160000.00, '', '', '', 0),
 ('F004', 2, 1, 'Mận Đỏ An Phước', 'trai-man-do.jpg', 'Hiển thị', 45000.00, '', '', '', 0),
-('F005', 1, 1, 'Mãng Cầu Xiêm', 'trai-mang-cau.jpg', 'Hiển thị', 45000.00, '', '', '', 0),
+('F005', 3, 1, 'Mãng Cầu Xiêm', 'trai-mang-cau.jpg', 'Hiển thị', 45000.00, '', '', '', 0),
 ('F006', 1, 1, 'Nho Mỹ', 'trai-nho-My.jpg', 'Hiển thị', 160000.00, '', '', '', 0),
-('F007', 1, 1, 'Ổi Xá Lị', 'trai-oi.jpg', 'Hiển thị', 45000.00, '', '', '', 0),
-('F008', 1, 1, 'Thanh Long Ruột Đỏ', 'trai-thanh-long.jpg', 'Hiển thị', 45000.00, '', '', '', 0),
-('F009', 1, 1, 'Bòn Bon', 'trai-bon-bon.jpg', 'Hiển thị', 45000.00, '', '', '', 0),
-('F010', 1, 1, 'Quýt Đường', 'trai-quyt.jpg', 'Hiển thị', 45000.00, '', '', '', 0),
-('F011', 1, 1, 'Dưa hấu Long An', 'trai-dua-hau.jpg', 'Hiển thị', 45000.00, '', '', '', 0),
-('F012', 1, 1, 'Chôm chôm', 'trai-chom-chom.jpg', 'Ẩn', 45000.00, '', '', '', 0),
-('F013', 1, 1, 'Xoài cát', 'trai-xoai.jpg', 'Hiển thị', 45000.00, '', '', '', 0),
-('F014', 1, 1, 'Dâu tây Đà Lạt', 'dau-tay.jpg', 'Hiển thị', 45000.00, '', '', '', 0),
-('F015', 1, 1, 'Mận Hà Nội', 'man-Ha-Noi.jpg', 'Hiển thị', 45000.00, '', '', '', 0),
-('F016', 1, 1, 'Bưởi da xanh', 'hinh-trai-buoi.jpg', 'Hiển thị', 45000.00, '', '', '', 0),
+('F007', 3, 1, 'Ổi Xá Lị', 'trai-oi.jpg', 'Hiển thị', 45000.00, '', '', '', 0),
+('F008', 3, 1, 'Thanh Long Ruột Đỏ', 'trai-thanh-long.jpg', 'Hiển thị', 45000.00, '', '', '', 0),
+('F009', 2, 1, 'Bòn Bon', 'trai-bon-bon.jpg', 'Hiển thị', 45000.00, '', '', '', 0),
+('F010', 2, 1, 'Quýt Đường', 'trai-quyt.jpg', 'Hiển thị', 45000.00, '', '', '', 0),
+('F011', 3, 1, 'Dưa hấu Long An', 'trai-dua-hau.jpg', 'Hiển thị', 45000.00, '', '', '', 0),
+('F012', 3, 1, 'Chôm chôm', 'trai-chom-chom.jpg', 'Ẩn', 45000.00, '', '', '', 0),
+('F013', 3, 1, 'Xoài cát', 'trai-xoai.jpg', 'Hiển thị', 45000.00, '', '', '', 0),
+('F014', 2, 1, 'Dâu tây Đà Lạt', 'dau-tay.jpg', 'Hiển thị', 45000.00, '', '', '', 0),
+('F015', 2, 1, 'Mận Hà Nội', 'man-Ha-Noi.jpg', 'Hiển thị', 45000.00, '', '', '', 0),
+('F016', 2, 1, 'Bưởi da xanh', 'hinh-trai-buoi.jpg', 'Hiển thị', 45000.00, '', '', '', 0),
 ('F017', 1, 1, 'Táo Envy', 'trai-tao.jpg', 'Hiển thị', 160000.00, '', '', '', 0),
 ('F018', 1, 1, 'Cherry Úc', 'trai-cherry-Uc.jpg', 'Hiển thị', 160000.00, '', '', '', 0),
 ('F019', 1, 1, 'Lê Trung Quốc', 'leTrungQuoc.jpg', 'Hiển thị', 160000.00, '', '', '', 0),
 ('F020', 1, 1, 'Dứa Mini Thái Lan', 'dua-mini-ThaiLan.jpg', 'Hiển thị', 160000.00, '', '', '', 0),
-('F021', 1, 1, 'Sầu Riêng', 'saurieng.jpg', 'Hiển thị', 45000.00, '', '', '', 0),
-('F022', 1, 1, 'Cam Sành', 'camsanh.jpg', 'Hiển thị', 45000.00, '', '', '', 0),
-('F023', 1, 1, 'Cam Cao Phong', 'camCaoPhong.jpg', 'Hiển thị', 45000.00, '', '', '', 0),
-('F024', 1, 1, 'Vải Thiều Bắc Giang', 'vaithieuBacGiang.png', 'Hiển thị', 45000.00, '', '', '', 0),
-('F025', 1, 1, 'Xoài Cát Hòa Lộc', 'xoaiCatHoaLoc.jpg', 'Hiển thị', 45000.00, '', '', '', 0),
-('F026', 1, 1, 'Dưa Lưới Bình An', 'dua-luoi-binh-an.jpg', 'Ẩn', 45000.00, '', '', '', 0),
+('F021', 3, 1, 'Sầu Riêng', 'saurieng.jpg', 'Hiển thị', 45000.00, '', '', '', 0),
+('F022', 3, 1, 'Cam Sành', 'camsanh.jpg', 'Hiển thị', 45000.00, '', '', '', 0),
+('F023', 2, 1, 'Cam Cao Phong', 'camCaoPhong.jpg', 'Hiển thị', 45000.00, '', '', '', 0),
+('F024', 2, 1, 'Vải Thiều Bắc Giang', 'vaithieuBacGiang.png', 'Hiển thị', 45000.00, '', '', '', 0),
+('F025', 2, 1, 'Xoài Cát Hòa Lộc', 'xoaiCatHoaLoc.jpg', 'Hiển thị', 45000.00, '', '', '', 0),
+('F026', 2, 1, 'Dưa Lưới Bình An', 'dua-luoi-binh-an.jpg', 'Ẩn', 45000.00, '', '', '', 0),
 ('F027', 1, 1, 'Đào Tuyết Trung Quốc', 'dao-tuyet-TrungQuoc.jpg', 'Hiển thị', 160000.00, '', '', '', 0),
 ('F028', 1, 1, 'Dưa Lưới Đài Loan', 'dua-luoi-DaiLoan.png', 'Hiển thị', 160000.00, '', '', '', 0),
-('F029', 1, 1, 'Đu Đủ', 'du-du.jpg', 'Hiển thị', 45000.00, '', '', '', 0),
+('F029', 3, 1, 'Đu Đủ', 'du-du.jpg', 'Hiển thị', 45000.00, '', '', '', 0),
 ('F030', 1, 1, 'Hồng Giòn Hàn Quốc', 'hong-gion-han-quoc.jpg', 'Ẩn', 160000.00, '', '', '', 0),
-('F031', 1, 1, 'Nhãn Hưng Yên', 'nhan-HungYen.jpg', 'Hiển thị', 45000.00, '', '', '', 0),
-('F032', 1, 1, 'Sapoche', 'sapoche.jpg', 'Ẩn', 45000.00, '', '', '', 0),
-('F033', 1, 1, 'Dừa Xiêm', 'trai-dua.jpg', 'Hiển thị', 45000.00, '', '', '', 0),
-('F034', 1, 1, 'Mít', 'trai-mit.jpg', 'Hiển thị', 45000.00, '', '', '', 0),
-('F035', 1, 1, 'Vú Sữa Lò Rèn', 'vu-sua-lo-ren.jpg', 'Hiển thị', 45000.00, '', '', '', 0),
+('F031', 2, 1, 'Nhãn Hưng Yên', 'nhan-HungYen.jpg', 'Hiển thị', 45000.00, '', '', '', 0),
+('F032', 3, 1, 'Sapoche', 'sapoche.jpg', 'Ẩn', 45000.00, '', '', '', 0),
+('F033', 3, 1, 'Dừa Xiêm', 'trai-dua.jpg', 'Hiển thị', 45000.00, '', '', '', 0),
+('F034', 3, 1, 'Mít', 'trai-mit.jpg', 'Hiển thị', 45000.00, '', '', '', 0),
+('F035', 2, 1, 'Vú Sữa Lò Rèn', 'vu-sua-lo-ren.jpg', 'Hiển thị', 45000.00, '', '', '', 0),
 ('F036', 1, 1, 'Quất Kinkan Nhật Bản', 'quat-kinkan-nhat.jpg', 'Hiển thị', 160000.00, '', '', '', 0);
 
 -- --------------------------------------------------------
