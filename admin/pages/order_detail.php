@@ -5,6 +5,10 @@ require '../classes/OrderDetail.php';
 session_name('ADMINSESSID');
 session_start();
 
+// Initialize database connection
+$database = new Database();
+$conn = $database->getConnection();
+
 if (!isset($_GET['id']) || empty($_GET['id'])) {
     header('Location: order.php');
     exit;

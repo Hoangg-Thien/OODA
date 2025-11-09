@@ -56,7 +56,7 @@ $result = $stmt->get_result();
 
                 <div class="icons">
                     <!-- Xem chi tiết -->
-                    <a href="<?= BASE_URL ?>view/pages/productDetails.php?id=<?= $row['product_id'] ?>" 
+                    <a href="<?= BASE_URL ?>user/view/pages/productDetails.php?id=<?= $row['product_id'] ?>" 
                         class="info-icon" title="Xem thông tin chi tiết">
                         <i class="fa-solid fa-circle-info fa-lg"></i>
                     </a>
