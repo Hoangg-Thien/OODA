@@ -83,7 +83,7 @@ include __DIR__ . '/../layout/header.php';
     </div>
 
     <div class="btn-container">
-        <a href="<?= BASE_URL ?>view/pages/history-user.php" class="btn">📜 Xem lịch sử đơn hàng</a>
+        <a href="<?= BASE_URL ?>user/view/pages/history-user.php" class="btn">📜 Xem lịch sử đơn hàng</a>
         <a href="<?= BASE_URL ?>index.php" class="btn back">🏠 Quay lại trang chủ</a>
     </div>
 </div>
