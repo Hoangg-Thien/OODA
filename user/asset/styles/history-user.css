@@ -34,7 +34,7 @@ body {
 }
 
 .order-table th, .order-table td {
-  padding: 12px 14px;
+  padding: 23px 6px;
   border: 1px solid #e0e0e0;
   text-align: center;
 }
@@ -56,11 +56,19 @@ body {
 .btn-detail {
   background: #43a047;
   color: #fff;
-  padding: 6px 12px;
+  font-size: 0.85em;        /* 👈 Giảm kích thước chữ */
+  padding: 5px 10px;        /* 👈 Giảm khoảng đệm cho cân */
   border-radius: 6px;
   text-decoration: none;
   transition: all 0.3s ease;
+  display: inline-block;
+  white-space: nowrap;      /* 👈 Tránh xuống dòng */
 }
+
+.btn-detail:hover {
+  background: #388e3c;      /* Màu hover đậm hơn một chút */
+}
+
 
 .btn-detail:hover {
   background: #2e7d32;
